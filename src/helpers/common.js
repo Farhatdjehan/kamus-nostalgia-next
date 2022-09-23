@@ -18,12 +18,18 @@ export const convertWord = (tmp, setValue, type) => {
             let nang = "nang";
             let nangConvert = nang?.replace(nang?.match(/[aeiou]/gi), syllabelWord[syllabelWord?.length - 1]?.match(/[aeiou]/gi) === null ? "a" : syllabelWord[syllabelWord?.length - 1]?.match(/[aeiou]/gi));
 
+            let remainingText = syllabelWord.map((item, index) => {
+                return (
+                    index + 1 !== syllabelWord?.length ? item : ''
+                )
+            });
+
             if (syllabelWord?.length === 1) {
                 resultConvert += type + firstConvert + nangConvert;
             } else if (syllabelWord?.length === 2) {
                 resultConvert += type + firstConvert + syllabelWord[0] + nangConvert;
             } else if (syllabelWord?.length > 2 && !syllabelWord.includes("nya")) {
-                resultConvert += type + firstConvert + syllabelWord[0] + syllabelWord[1] + nangConvert;
+                resultConvert += type + firstConvert + remainingText.join('') + nangConvert;
             } else if (syllabelWord.includes("nya") && syllabelWord?.length > 3) {
                 resultConvert += type + syllabelWord[2] + syllabelWord[0] + syllabelWord[1] + nang + syllabelWord[3];
             } else if (syllabelWord.includes("nya") && syllabelWord?.length === 3) {
