@@ -24,6 +24,16 @@ export const convertWord = (tmp, setValue, type) => {
                 )
             });
 
+            let remainingTextNya = syllabelWord.map((item, index) => {
+                return (
+                    index + 1 !== syllabelWord?.length - 1 && index + 1 !== syllabelWord?.length - 0 ? item : ''
+                )
+            });
+
+
+            // if (e.key == ' ')
+            //     console.log('betul')
+
             if (syllabelWord?.length === 1) {
                 resultConvert += type + firstConvert + nangConvert;
             } else if (syllabelWord?.length === 2) {
@@ -31,9 +41,9 @@ export const convertWord = (tmp, setValue, type) => {
             } else if (syllabelWord?.length > 2 && !syllabelWord.includes("nya")) {
                 resultConvert += type + firstConvert + remainingText.join('') + nangConvert;
             } else if (syllabelWord.includes("nya") && syllabelWord?.length > 3) {
-                resultConvert += type + syllabelWord[2] + syllabelWord[0] + syllabelWord[1] + nang + syllabelWord[3];
+                resultConvert += type + syllabelWord[syllabelWord?.length - 2] + remainingTextNya.join('') + nang + syllabelWord[syllabelWord?.length - 1];
             } else if (syllabelWord.includes("nya") && syllabelWord?.length === 3) {
-                resultConvert += type + syllabelWord[2] + syllabelWord[0] + nang + syllabelWord[3];
+                resultConvert += type + syllabelWord[2] + syllabelWord[0] + nang + syllabelWord[syllabelWord?.length - 1];
             }
 
         } else {

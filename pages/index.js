@@ -8,6 +8,7 @@ const MainScreen = () => {
     const [text, setText] = useState();
     const [originalText, setOriginalText] = useState();
     const [copied, setCopied] = useState(false);
+    const [disable, setDisable] = useState(false);
     const [indexSelected, setIndexSelected] = useState(0);
     const [keyValue, setKeyValue] = useState(0);
     const [languangeType, setLanguangeType] = useState();
@@ -28,7 +29,12 @@ const MainScreen = () => {
         }
     }, [copied]);
 
-    
+    useEffect(() => {
+        if (disable) {
+            setTimeout(function () { setDisable(false) }, 2000);
+        }
+    }, [disable]);
+
     useEffect(() => {
         let kamnos = document.querySelectorAll("#kamnos");
         setTimeout(() => {
@@ -38,16 +44,31 @@ const MainScreen = () => {
         }, 1000);
     }, []);
 
-    const handleChange = (e) => {
-        let tmp = e.target.value;
+    useEffect(() => {
+        console.log(!disable && languangeType === 'u')
+    }, [disable.languangeType])
 
-        setOriginalText(tmp);
-        if (tmp !== '') {
-            convertWord(tmp, setText, languangeType);
+    const handleChange = (e) => {
+        if (disable && languangeType === 'u') {
+            return false
         } else {
-            setText();
+            let tmp = e.target.value;
+
+            setOriginalText(tmp);
+            if (tmp !== '') {
+                convertWord(tmp, setText, languangeType);
+            } else {
+                setText();
+            }
         }
     }
+
+    const handleKeyDown = (e) => {
+        if (e.key === ' ' && e.keyCode === 32 && languangeType === 'u') {
+            setDisable(true);
+        }
+    }
+
     const handleSelect = (e) => {
         setIndexSelected(e.target.id);
     }
@@ -56,6 +77,7 @@ const MainScreen = () => {
         let reset = document.getElementById('input');
         reset.value = "";
         setText();
+        setDisable(false);
     }
 
 
@@ -66,7 +88,7 @@ const MainScreen = () => {
                     Kamnos
                 </div>
                 <div className="main-screen__input">
-                    <input type="text" id="input" placeholder="Masukkan Kata" name="input" onChange={handleChange} autoFocus />
+                    <input disabled={disable ? disable : false} type="text" id="input" placeholder="Masukkan Kata" name="input" onChange={handleChange} onKeyDown={handleKeyDown} autoFocus />
                     {text &&
                         <div className="main-screen__times" onClick={handleReset}>×</div>}
                 </div>
@@ -104,6 +126,13 @@ const MainScreen = () => {
                     <div className="main-screen__toast">
                         <div className="toast-text">
                             Berhasil menyalin!
+                        </div>
+                    </div>
+                }
+                {disable &&
+                    <div className="main-screen__toast">
+                        <div className="toast-text">
+                            Fitur Membuat Kalimat Belum Tersedia!
                         </div>
                     </div>
                 }
