@@ -21,7 +21,7 @@ const MainScreen = () => {
         if (text) {
             convertWord(originalText, setText, languangeType);
         }
-    }, [indexSelected, originalText, languangeType]);
+    }, [indexSelected, originalText, languangeType, disable]);
 
     useEffect(() => {
         if (copied) {
@@ -45,8 +45,7 @@ const MainScreen = () => {
     }, []);
 
     useEffect(() => {
-        console.log(!disable && languangeType === 'u')
-    }, [disable.languangeType])
+    }, [disable, languangeType])
 
     const handleChange = (e) => {
         if (disable && languangeType === 'u') {
