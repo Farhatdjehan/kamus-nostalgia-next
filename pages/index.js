@@ -5,6 +5,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { SayButton } from 'react-say';
 import sound from './../public/sound.png';
 import copy from './../public/copy.png';
+import Speech from 'react-text-to-speech'
 
 const MainScreen = () => {
     const convertWordList = ["G", "S", "P", "U"];
@@ -93,6 +94,7 @@ const MainScreen = () => {
         // setDisable(false);
     }
 
+    const startBtn = <button className="main-screen__button">Suara</button>
 
     return (
         <div key={keyValue} id="kamnos" className="main-screen__dictionary">
@@ -130,18 +132,18 @@ const MainScreen = () => {
                     {text && text[1]}
                 </div>
                 <div className="main-screen__copy">
-                    {text &&
-                        <div id="button-sound">
-                            <SayButton
+
+                    <div id="button-sound">
+                        {/* <SayButton
                                 id="test"
                                 onClick={event => console.log(event)}
                                 speak={text[1]}
                             >
                                 <span style={{ marginRight: '4px' }}><img width={15} height={15} src={sound.src} /></span>
                                 Suara
-                            </SayButton>
-                        </div>
-                    }
+                            </SayButton> */}
+                        <Speech text={text && text[1]} startBtn={startBtn} />
+                    </div>
                     <CopyToClipboard text={text && text[1]}
                         onCopy={() => setCopied(true)}>
                         <button className="main-screen__button">
