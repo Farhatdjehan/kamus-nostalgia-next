@@ -133,17 +133,17 @@ const MainScreen = () => {
                 </div>
                 <div className="main-screen__copy">
 
-                    <div id="button-sound">
-                        {/* <SayButton
+                    {/* <div id="button-sound">
+                        <SayButton
                                 id="test"
                                 onClick={event => console.log(event)}
                                 speak={text[1]}
                             >
                                 <span style={{ marginRight: '4px' }}><img width={15} height={15} src={sound.src} /></span>
                                 Suara
-                            </SayButton> */}
+                            </SayButton> 
                         <Speech text={text && text[1]} startBtn={startBtn} />
-                    </div>
+                    </div> */}
                     <CopyToClipboard text={text && text[1]}
                         onCopy={() => setCopied(true)}>
                         <button className="main-screen__button">
