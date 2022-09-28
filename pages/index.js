@@ -2,6 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { convertWord } from "../src/helpers/common";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { SayButton } from 'react-say';
+import sound from './../public/sound.png';
+import copy from './../public/copy.png';
 
 const MainScreen = () => {
     const convertWordList = ["G", "S", "P", "U"];
@@ -12,6 +15,9 @@ const MainScreen = () => {
     const [indexSelected, setIndexSelected] = useState(0);
     const [keyValue, setKeyValue] = useState(0);
     const [languangeType, setLanguangeType] = useState();
+
+    useEffect(() => {
+    }, [])
 
     useEffect(() => {
         setLanguangeType(convertWordList[indexSelected]?.toLowerCase());
@@ -29,11 +35,15 @@ const MainScreen = () => {
         }
     }, [copied]);
 
+    // useEffect(() => {
+    //     if (disable) {
+    //         setTimeout(function () { setDisable(false) }, 2000);
+    //     }
+    // }, [disable]);
+
     useEffect(() => {
-        if (disable) {
-            setTimeout(function () { setDisable(false) }, 2000);
-        }
-    }, [disable]);
+
+    }, [])
 
     useEffect(() => {
         let kamnos = document.querySelectorAll("#kamnos");
@@ -48,24 +58,28 @@ const MainScreen = () => {
     }, [disable, languangeType])
 
     const handleChange = (e) => {
-        if (disable && languangeType === 'u') {
-            return false
-        } else {
-            let tmp = e.target.value;
+        // if (disable && languangeType === 'u') {
+        //     return false
+        // } else {
+        let tmp = e.target.value;
 
-            setOriginalText(tmp);
-            if (tmp !== '') {
-                convertWord(tmp, setText, languangeType);
-            } else {
-                setText();
-            }
+        setOriginalText(tmp);
+        if (tmp !== '') {
+            convertWord(tmp, setText, languangeType);
+        } else {
+            setText();
         }
+        // }
+    }
+
+    const handleSound = () => {
+        setSound(true);
     }
 
     const handleKeyDown = (e) => {
-        if (e.key === ' ' && e.keyCode === 32 && languangeType === 'u') {
-            setDisable(true);
-        }
+        // if (e.key === ' ' && e.keyCode === 32 && languangeType === 'u') {
+        //     setDisable(true);
+        // }
     }
 
     const handleSelect = (e) => {
@@ -76,7 +90,7 @@ const MainScreen = () => {
         let reset = document.getElementById('input');
         reset.value = "";
         setText();
-        setDisable(false);
+        // setDisable(false);
     }
 
 
@@ -116,9 +130,20 @@ const MainScreen = () => {
                     {text && text[1]}
                 </div>
                 <div className="main-screen__copy">
+                    <div id="button-sound">
+                        <SayButton
+                            id="test"
+                            onClick={event => console.log(event)}
+                            speak={text && text[1]}
+                        >
+                            <span style={{ marginRight: '4px' }}><img width={15} height={15} src={sound.src} /></span>
+                            Suara
+                        </SayButton>
+                    </div>
                     <CopyToClipboard text={text && text[1]}
                         onCopy={() => setCopied(true)}>
-                        <button className="main-screen__button">Salin</button>
+                        <button className="main-screen__button">
+                            <span style={{ marginRight: '4px' }}><img width={15} height={15} src={copy.src} /></span>Salin</button>
                     </CopyToClipboard>
                 </div>
                 {copied &&
@@ -137,7 +162,7 @@ const MainScreen = () => {
                 }
             </div>
 
-        </div>
+        </div >
     );
 };
 

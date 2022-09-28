@@ -10,43 +10,73 @@ export const convertWord = (tmp, setValue, type) => {
         if (type == "u") {
 
             const syllableRegex = /[^aeiouy]*[aeiouy]+(?:[^aeiouy]*$|[^aeiouy](?=[^aeiouy]))?/gi;
-            function syllabify(words) {
-                return words.match(syllableRegex);
+
+            let nangReplace;
+            let remainingTextNya;
+            let remainingText;
+            let nangConvert;
+            let syllabelWord;
+            let firstConvert;
+            let lengthWord;
+            let nang;
+
+            nang = "nang";
+            syllabelWord = [];
+            lengthWord = tmp.split(" ");
+
+            for (let i = 0; i <= lengthWord.length; i++) {
+                if (lengthWord) {
+                    syllabelWord.push(syllabify(lengthWord[i]));
+                }
             }
-            let syllabelWord = syllabify(tmp);
-            let firstConvert = syllabelWord[syllabelWord?.length - 1]?.replace(syllabelWord[syllabelWord?.length - 1].match(/[aeiou]/gi), "a");
-            let nang = "nang";
-            let nangConvert = nang?.replace(nang?.match(/[aeiou]/gi), syllabelWord[syllabelWord?.length - 1]?.match(/[aeiou]/gi) === null ? "a" : syllabelWord[syllabelWord?.length - 1]?.match(/[aeiou]/gi));
 
-            let remainingText = syllabelWord.map((item, index) => {
-                return (
-                    index + 1 !== syllabelWord?.length ? item : ''
-                )
-            });
+            for (let i = 0; i <= syllabelWord?.length; i++) {
+                if (syllabelWord[i]?.length) {
+                    let positionConvert = syllabelWord[i]?.length - 1;
+                    let positionConvertTwo = syllabelWord[i]?.length - 2;
 
-            let remainingTextNya = syllabelWord.map((item, index) => {
-                return (
-                    index + 1 !== syllabelWord?.length - 1 && index + 1 !== syllabelWord?.length - 0 ? item : ''
-                )
-            });
+                    if (syllabelWord[i][positionConvert]?.match(/[aeiou]/gi)?.length === 2) {
+                        nangReplace = syllabelWord[i][positionConvert]?.match(/[aeiou]/gi)[1];
+                    } else {
+                        nangReplace = syllabelWord[i][positionConvert]?.match(/[aeiou]/gi)
+                    }
 
+                    firstConvert = syllabelWord[i][positionConvert]?.replace(syllabelWord[i][positionConvert].match(/[aeiou]/gi), "a")
 
-            // if (e.key == ' ')
-            //     console.log('betul')
+                    nangConvert = nang?.replace(nang?.match(/[aeiou]/gi), syllabelWord[i][positionConvert]?.match(/[aeiou]/gi) === null ? "a" : nangReplace);
 
-            if (syllabelWord?.length === 1) {
-                resultConvert += type + firstConvert + nangConvert;
-            } else if (syllabelWord?.length === 2) {
-                resultConvert += type + firstConvert + syllabelWord[0] + nangConvert;
-            } else if (syllabelWord?.length > 2 && !syllabelWord.includes("nya")) {
-                resultConvert += type + firstConvert + remainingText.join('') + nangConvert;
-            } else if (syllabelWord.includes("nya") && syllabelWord?.length > 3) {
-                resultConvert += type + syllabelWord[syllabelWord?.length - 2] + remainingTextNya.join('') + nang + syllabelWord[syllabelWord?.length - 1];
-            } else if (syllabelWord.includes("nya") && syllabelWord?.length === 3) {
-                resultConvert += type + syllabelWord[2] + syllabelWord[0] + nang + syllabelWord[syllabelWord?.length - 1];
+                    remainingText = syllabelWord[i].map((item, index) => {
+                        return (
+                            index + 1 !== syllabelWord[i]?.length ? item : ''
+                        )
+                    });
+
+                    remainingTextNya = syllabelWord[i].map((item, index) => {
+                        return (
+                            index + 1 !== positionConvert && index + 1 !== positionConvert - 0 ? item : ''
+                        )
+                    });
+
+                    if (syllabelWord[i]?.length === 1) {
+                        resultConvert += type + firstConvert + nangConvert + ' ';
+                    } else if (syllabelWord[i]?.length === 2) {
+                        resultConvert += type + firstConvert + syllabelWord[i][0] + nangConvert + ' ';
+                    } else if (syllabelWord[i]?.length > 2 && !syllabelWord[i].includes("nya")) {
+                        resultConvert += type + firstConvert + remainingText.join('') + nangConvert + ' ';
+                    } else if (syllabelWord[i].includes("nya") && syllabelWord[i]?.length > 3) {
+                        resultConvert += type + syllabelWord[i][positionConvertTwo] + remainingTextNya.join('') + nang + syllabelWord[i][positionConvert] + ' ';
+                    } else if (syllabelWord[i].includes("nya") && syllabelWord[i]?.length === 3) {
+                        resultConvert += type + syllabelWord[i][2] + syllabelWord[i][0] + nang + syllabelWord[i][positionConvert] + ' ';
+                    }
+                }
+            }
+
+            function syllabify(words) {
+                return words?.match(syllableRegex);
             }
 
         } else {
+
             for (let i = 0; i <= convertNonVocalAlpha.length; i++) {
                 for (let j = 0; j <= 0; j++) {
                     resultConvert +=
@@ -56,6 +86,7 @@ export const convertWord = (tmp, setValue, type) => {
                         convertVocalAlpha[i];
                 }
             }
+
         }
     }
     setValue(resultConvert?.split('undefined'));

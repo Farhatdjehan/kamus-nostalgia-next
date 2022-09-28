@@ -115,15 +115,20 @@ body {
 }
 .main-screen__copy {
   padding-top: 16px;
-  text-align: end;
+  display: flex;
+  justify-content: space-between;
+
 }
-.main-screen__button {
+.main-screen__button,
+#button-sound > button {
   padding: 12px 20px;
   border: none !important;
   border-radius: 8px;
   color: #fff;
   font-weight: 600;
   background-color: #be2239;
+  display: flex;
+  align-items: center;
 }
 .main-screen__toast {
   position: absolute;
