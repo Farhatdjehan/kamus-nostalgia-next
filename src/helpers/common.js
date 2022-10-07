@@ -89,5 +89,6 @@ export const convertWord = (tmp, setValue, type) => {
 
         }
     }
-    setValue(resultConvert?.split('undefined'));
+    let result = resultConvert?.split('undefined')
+    setValue(result[1]);
 }

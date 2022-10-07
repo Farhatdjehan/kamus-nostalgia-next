@@ -16,8 +16,10 @@ const MainScreen = () => {
     const [originalText, setOriginalText] = useState();
     const [copied, setCopied] = useState(false);
     const [reverseShow, setReverseShow] = useState(false);
+    const [reverseShowUpdate, setReverseShowUpdate] = useState(false);
     const [disable, setDisable] = useState(false);
     const [reverse, setReverse] = useState();
+    const [reverseUpdated, setReverseUpdated] = useState();
     const [indexSelected, setIndexSelected] = useState(0);
     const [keyValue, setKeyValue] = useState(0);
     const [languangeType, setLanguangeType] = useState();
@@ -48,14 +50,24 @@ const MainScreen = () => {
     }, []);
 
     useEffect(() => {
-    }, [disable, languangeType])
+        if (text !== undefined) {
+            if (reverseShow) {
+                let reset = document.getElementById('input');
+                reset.value = text;
+                setReverse(originalText);
+            } else {
+                let reset = document.getElementById('input');
+                reset.value = originalText;
+            }
+        }
+        console.log(text);
+    }, [reverseShow, text, originalText])
 
     const handleChange = (e) => {
 
         let tmp = e.target.value;
 
         if (reverseShow) {
-
             if (languangeType !== "u") {
                 if (tmp !== '') {
 
@@ -78,7 +90,7 @@ const MainScreen = () => {
                         }
                         let final = resultConvert?.split('NaN');
                         let resultFinal = final[0].split("undefined");
-                        setReverse(resultFinal);
+                        setReverse(resultFinal[1]);
                     }
                 } else {
                     setReverse();
@@ -100,9 +112,11 @@ const MainScreen = () => {
                 }
 
                 for (let i = 0; i <= lengthWord.length; i++) {
+
                     if (lengthWord) {
                         syllabelWord.push(syllabify(lengthWord[i]));
                     }
+
                 }
 
                 for (let i = 0; i <= syllabelWord?.length; i++) {
@@ -132,8 +146,6 @@ const MainScreen = () => {
 
                     }
                 }
-
-
             }
         } else {
             setOriginalText(tmp);
@@ -146,8 +158,7 @@ const MainScreen = () => {
     }
 
     const reverseWord = () => {
-        let reset = document.getElementById('input');
-        reset.value = "";
+
         setReverseShow(!reverseShow);
         // setText();
     }
@@ -211,8 +222,7 @@ const MainScreen = () => {
 
                 </div>
                 <div className="main-screen__result-convert">
-                    {reverseShow && reverse && reverse[1]}
-                    {!reverseShow && text && text[1]}
+                    {reverseShow ? reverse : text}
                 </div>
                 <div className="main-screen__copy">
 
@@ -227,7 +237,7 @@ const MainScreen = () => {
                             </SayButton> 
                         <Speech text={text && text[1]} startBtn={startBtn} />
                     </div> */}
-                    <CopyToClipboard text={text && text[1]}
+                    <CopyToClipboard text={reverseShow ? reverse : text}
                         onCopy={() => setCopied(true)}>
                         <button className="main-screen__button">
                             <span style={{ marginRight: '4px' }}><img width={15} height={15} src={copy.src} /></span>Salin</button>
