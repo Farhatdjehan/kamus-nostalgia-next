@@ -60,7 +60,6 @@ const MainScreen = () => {
                 reset.value = originalText;
             }
         }
-        console.log(text);
     }, [reverseShow, text, originalText])
 
     const handleChange = (e) => {
@@ -112,11 +111,9 @@ const MainScreen = () => {
                 }
 
                 for (let i = 0; i <= lengthWord.length; i++) {
-
                     if (lengthWord) {
                         syllabelWord.push(syllabify(lengthWord[i]));
                     }
-
                 }
 
                 for (let i = 0; i <= syllabelWord?.length; i++) {
@@ -199,11 +196,9 @@ const MainScreen = () => {
                     <div className="main-screen__selector-container">
                         {convertWordList.map((item, index) => {
                             return (
-                                <>
-                                    <div id={index} key={index} onClick={handleSelect} className={` main-screen__selector-input ${indexSelected == index && 'main-screen__active'}`}>
-                                        {item}
-                                    </div>
-                                </>
+                                <div id={index} key={index} onClick={handleSelect} className={` main-screen__selector-input ${indexSelected == index && 'main-screen__active'}`}>
+                                    {item}
+                                </div>
                             )
                         })}
                     </div>
@@ -226,17 +221,17 @@ const MainScreen = () => {
                 </div>
                 <div className="main-screen__copy">
 
-                    {/* <div id="button-sound">
+                    <div id="button-sound">
                         <SayButton
-                                id="test"
-                                onClick={event => console.log(event)}
-                                speak={text[1]}
-                            >
-                                <span style={{ marginRight: '4px' }}><img width={15} height={15} src={sound.src} /></span>
-                                Suara
-                            </SayButton> 
-                        <Speech text={text && text[1]} startBtn={startBtn} />
-                    </div> */}
+                            id="test"
+                            onClick={event => console.log(event)}
+                            speak={text}
+                        >
+                            <span style={{ marginRight: '4px' }}><img width={15} height={15} src={sound.src} /></span>
+                            Suara
+                        </SayButton>
+                        {/* <Speech text={text && text[1]} startBtn={startBtn} /> */}
+                    </div>
                     <CopyToClipboard text={reverseShow ? reverse : text}
                         onCopy={() => setCopied(true)}>
                         <button className="main-screen__button">
