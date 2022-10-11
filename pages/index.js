@@ -1,8 +1,8 @@
 /* eslint-disable */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { convertWord } from "../src/helpers/common";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { SayButton } from 'react-say';
+import { SayButton, SayUtterance } from 'react-say';
 import sound from './../public/sound.png';
 import copy from './../public/copy.png';
 import Speech from 'react-text-to-speech';
@@ -11,6 +11,7 @@ import swap from './../public/swap.png';
 import swapWhite from './../public/swap_white.png';
 
 const MainScreen = () => {
+
     const convertWordList = ["G", "S", "P", "U"];
     const [text, setText] = useState();
     const [originalText, setOriginalText] = useState();
@@ -22,6 +23,7 @@ const MainScreen = () => {
     const [reverseUpdated, setReverseUpdated] = useState();
     const [indexSelected, setIndexSelected] = useState(0);
     const [keyValue, setKeyValue] = useState(0);
+    const [voice, setVoice] = useState();
     const [languangeType, setLanguangeType] = useState();
 
     useEffect(() => {
@@ -61,6 +63,15 @@ const MainScreen = () => {
             }
         }
     }, [reverseShow, text, originalText])
+
+
+
+
+    const speechHandler = (msgT) => {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.speak(new SpeechSynthesisUtterance(msgT))
+        }
+    };
 
     const handleChange = (e) => {
 
@@ -222,14 +233,19 @@ const MainScreen = () => {
                 <div className="main-screen__copy">
 
                     <div id="button-sound">
-                        <SayButton
+                        {/* <SayUtterance
+                            utterance={voice}
+                        /> */}
+                        <button onClick={() => speechHandler(text)}><span style={{ marginRight: '4px' }}><img width={15} height={15} src={sound.src} /></span>
+                            Suara</button>
+                        {/* <SayButton
                             id="test"
                             onClick={event => console.log(event)}
                             speak={text}
                         >
                             <span style={{ marginRight: '4px' }}><img width={15} height={15} src={sound.src} /></span>
                             Suara
-                        </SayButton>
+                        </SayButton> */}
                         {/* <Speech text={text && text[1]} startBtn={startBtn} /> */}
                     </div>
                     <CopyToClipboard text={reverseShow ? reverse : text}
