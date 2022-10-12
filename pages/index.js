@@ -14,6 +14,7 @@ const MainScreen = () => {
 
     const convertWordList = ["G", "S", "P", "U"];
     const [text, setText] = useState();
+    const [platform, setPlatform] = useState();
     const [originalText, setOriginalText] = useState();
     const [copied, setCopied] = useState(false);
     const [reverseShow, setReverseShow] = useState(false);
@@ -64,14 +65,40 @@ const MainScreen = () => {
         }
     }, [reverseShow, text, originalText])
 
-
-
-
     const speechHandler = (msgT) => {
+        let msg = new SpeechSynthesisUtterance();
+        msg.lang = 'en-US';
+        msg.text = msgT;
         if ('speechSynthesis' in window) {
-            window.speechSynthesis.speak(new SpeechSynthesisUtterance(msgT))
+            window.speechSynthesis.speak(msg)
         }
     };
+
+    function getOperatingSystem(window) {
+        let operatingSystem = 'Not known';
+        if (window.navigator.appVersion.indexOf('Win') !== -1) { operatingSystem = 'Windows OS'; }
+        if (window.navigator.appVersion.indexOf('Mac') !== -1) { operatingSystem = 'MacOS'; }
+        if (window.navigator.appVersion.indexOf('X11') !== -1) { operatingSystem = 'UNIX OS'; }
+        if (window.navigator.appVersion.indexOf('Linux') !== -1) { operatingSystem = 'Linux OS'; }
+
+        return operatingSystem;
+    }
+
+    const OS = (window) => {
+        return getOperatingSystem(window); // <-- missing return
+    };
+    useEffect(() => {
+        if (reverseShow) {
+            window?.ReactNativeWebView?.postMessage(reverse);
+        } else {
+            window?.ReactNativeWebView?.postMessage(text);
+        }
+    }, [reverseShow, reverse, text])
+
+    useEffect(() => {
+        setPlatform(OS(window));
+    }, [])
+
 
     const handleChange = (e) => {
 
@@ -185,8 +212,6 @@ const MainScreen = () => {
         setText();
     }
 
-    const startBtn = <button className="main-screen__button">Suara</button>
-
     return (
         <div key={keyValue} id="kamnos" className="main-screen__dictionary">
             <div className="main-screen__container">
@@ -233,20 +258,13 @@ const MainScreen = () => {
                 <div className="main-screen__copy">
 
                     <div id="button-sound">
-                        {/* <SayUtterance
-                            utterance={voice}
-                        /> */}
-                        <button onClick={() => speechHandler(text)}><span style={{ marginRight: '4px' }}><img width={15} height={15} src={sound.src} /></span>
-                            Suara</button>
-                        {/* <SayButton
-                            id="test"
-                            onClick={event => console.log(event)}
-                            speak={text}
-                        >
-                            <span style={{ marginRight: '4px' }}><img width={15} height={15} src={sound.src} /></span>
-                            Suara
-                        </SayButton> */}
-                        {/* <Speech text={text && text[1]} startBtn={startBtn} /> */}
+                        {platform === "Windows OS" &&
+                            <button onClick={() => speechHandler(text)}>
+                                <span style={{ marginRight: '4px' }}><img width={15} height={15} src={sound.src} /></span>
+                                Suara
+                            </button>
+                        }
+
                     </div>
                     <CopyToClipboard text={reverseShow ? reverse : text}
                         onCopy={() => setCopied(true)}>
