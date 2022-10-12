@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { convertWord } from "../src/helpers/common";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import sound from "./../public/sound.png";
+import "animate.css";
 import copy from "./../public/copy.png";
 import Image from "next/image";
 import swap from "./../public/swap.png";
@@ -68,11 +69,15 @@ const MainScreen = () => {
   }, [reverseShow, text, originalText]);
 
   const speechHandler = (msgT: any) => {
-    let msg = new SpeechSynthesisUtterance();
-    msg.lang = "id-ID";
-    msg.text = msgT;
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.speak(msg);
+    if (reverse === undefined || text === undefined) {
+      setCopied(true);
+    } else {
+      let msg = new SpeechSynthesisUtterance();
+      msg.lang = "id-ID";
+      msg.text = msgT;
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.speak(msg);
+      }
     }
   };
 
@@ -251,8 +256,9 @@ const MainScreen = () => {
                     id={index}
                     key={index}
                     onClick={handleSelect}
-                    className={` main-screen__selector-input ${
-                      indexSelected == index && "main-screen__active"
+                    className={`main-screen__selector-input ${
+                      indexSelected == index &&
+                      "main-screen__active animate__animated animate__pulse animate__faster"
                     }`}
                   >
                     {item}
@@ -268,7 +274,8 @@ const MainScreen = () => {
 
             <div
               className={`main-screen__result-reverse ${
-                reverseShow && "active-reverse"
+                reverseShow &&
+                "active-reverse animate__animated animate__pulse animate__faster"
               }`}
               onClick={reverseWord}
             >
@@ -285,16 +292,17 @@ const MainScreen = () => {
           </div>
           <div className="main-screen__copy">
             <div id="button-sound">
-              {platform !== undefined && platform === "Windows OS" && (
-                <button
-                  onClick={() => speechHandler(reverseShow ? reverse : text)}
-                >
-                  <span style={{ marginRight: "4px" }}>
-                    <img width={15} height={15} src={sound.src} />
-                  </span>
-                  Suara
-                </button>
-              )}
+              {platform !== undefined &&
+                (platform === "Windows OS" || platform === "Linux OS") && (
+                  <button
+                    onClick={() => speechHandler(reverseShow ? reverse : text)}
+                  >
+                    <span style={{ marginRight: "4px" }}>
+                      <img width={15} height={15} src={sound.src} />
+                    </span>
+                    Suara
+                  </button>
+                )}
             </div>
             <CopyToClipboard
               text={reverseShow ? reverse : text}
@@ -309,8 +317,12 @@ const MainScreen = () => {
             </CopyToClipboard>
           </div>
           {copied && (
-            <div className="main-screen__toast">
-              <div className="toast-text">Berhasil menyalin!</div>
+            <div className="main-screen__toast animate__animated animate__bounceInUp animate__faster">
+              <div className="toast-text">
+                {reverse === undefined || text === undefined
+                  ? "Masukkan Kata Dulu!"
+                  : "Berhasil menyalin!"}
+              </div>
             </div>
           )}
           {disable && (

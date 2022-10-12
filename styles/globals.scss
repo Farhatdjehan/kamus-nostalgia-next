@@ -58,6 +58,10 @@ body {
   height: 100%;
 }
 
+button:disabled {
+  background-color: #be2239bb !important;
+}
+
 .main-screen__dictionary {
   max-width: 375px;
   display: flex;
