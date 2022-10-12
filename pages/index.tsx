@@ -85,7 +85,6 @@ const MainScreen = () => {
       }
       // setAnimationSound(true);
     }
-    console.log(reverse === undefined && text === undefined, reverse, text);
   };
 
   function getOperatingSystem(window: any) {
@@ -307,21 +306,20 @@ const MainScreen = () => {
           </div>
           <div className="main-screen__copy">
             <div id="button-sound">
-              {platform !== undefined &&
-                (platform === "Windows OS" || platform === "Linux OS") && (
-                  <button
-                    className={`${
-                      animationSound &&
-                      "animate__animated animate__pulse animate__faster"
-                    }`}
-                    onClick={() => speechHandler(reverseShow ? reverse : text)}
-                  >
-                    <span style={{ marginRight: "4px" }}>
-                      <img width={15} height={15} src={sound.src} />
-                    </span>
-                    Suara
-                  </button>
-                )}
+              {platform !== undefined && platform === "Windows OS" && (
+                <button
+                  className={`${
+                    animationSound &&
+                    "animate__animated animate__pulse animate__faster"
+                  }`}
+                  onClick={() => speechHandler(reverseShow ? reverse : text)}
+                >
+                  <span style={{ marginRight: "4px" }}>
+                    <img width={15} height={15} src={sound.src} />
+                  </span>
+                  Suara
+                </button>
+              )}
             </div>
             <CopyToClipboard
               text={reverseShow ? reverse : text}
