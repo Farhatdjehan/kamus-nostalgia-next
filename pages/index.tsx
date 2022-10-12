@@ -69,7 +69,7 @@ const MainScreen = () => {
 
   const speechHandler = (msgT: any) => {
     let msg = new SpeechSynthesisUtterance();
-    msg.lang = "en-US";
+    msg.lang = "id-ID";
     msg.text = msgT;
     if ("speechSynthesis" in window) {
       window.speechSynthesis.speak(msg);
@@ -106,6 +106,7 @@ const MainScreen = () => {
   }, [reverseShow, reverse, text]);
 
   useEffect(() => {
+    console.log(OS(window));
     setPlatform(OS(window));
   }, []);
 
@@ -284,8 +285,10 @@ const MainScreen = () => {
           </div>
           <div className="main-screen__copy">
             <div id="button-sound">
-              {platform === "Windows OS" && (
-                <button onClick={() => speechHandler(text)}>
+              {platform !== undefined && platform === "Windows OS" && (
+                <button
+                  onClick={() => speechHandler(reverseShow ? reverse : text)}
+                >
                   <span style={{ marginRight: "4px" }}>
                     <img width={15} height={15} src={sound.src} />
                   </span>
