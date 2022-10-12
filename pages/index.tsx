@@ -21,6 +21,8 @@ const MainScreen = () => {
   const [reverseShow, setReverseShow]: any = useState(false);
   const [reverseShowUpdate, setReverseShowUpdate]: any = useState(false);
   const [disable, setDisable]: any = useState(false);
+  const [animationCopy, setAnimationCopy]: any = useState(false);
+  const [animationSound, setAnimationSound]: any = useState(false);
   const [reverse, setReverse]: any = useState();
   const [reverseUpdated, setReverseUpdated]: any = useState();
   const [indexSelected, setIndexSelected]: any = useState(0);
@@ -42,6 +44,8 @@ const MainScreen = () => {
     if (copied) {
       setTimeout(function () {
         setCopied(false);
+        setAnimationCopy(false);
+        setAnimationSound(false);
       }, 2000);
     }
   }, [copied]);
@@ -69,8 +73,9 @@ const MainScreen = () => {
   }, [reverseShow, text, originalText]);
 
   const speechHandler = (msgT: any) => {
-    if (reverse === undefined || text === undefined) {
+    if (reverse === undefined && text === undefined) {
       setCopied(true);
+      setAnimationSound(true);
     } else {
       let msg = new SpeechSynthesisUtterance();
       msg.lang = "id-ID";
@@ -78,7 +83,9 @@ const MainScreen = () => {
       if ("speechSynthesis" in window) {
         window.speechSynthesis.speak(msg);
       }
+      // setAnimationSound(true);
     }
+    console.log(reverse === undefined && text === undefined, reverse, text);
   };
 
   function getOperatingSystem(window: any) {
@@ -111,9 +118,12 @@ const MainScreen = () => {
   }, [reverseShow, reverse, text]);
 
   useEffect(() => {
-    console.log(OS(window));
     setPlatform(OS(window));
   }, []);
+
+  useEffect(() => {
+    console.log(platform);
+  }, [platform]);
 
   const handleChange = (e) => {
     let tmp = e.target.value;
@@ -222,6 +232,11 @@ const MainScreen = () => {
     setText();
   };
 
+  const handleCopy = () => {
+    setCopied(true);
+    setAnimationCopy(true);
+  };
+
   return (
     <DashboardLayout pageTitle="Kamus Nostalgia">
       <div key={keyValue} id="kamnos" className="main-screen__dictionary">
@@ -295,6 +310,10 @@ const MainScreen = () => {
               {platform !== undefined &&
                 (platform === "Windows OS" || platform === "Linux OS") && (
                   <button
+                    className={`${
+                      animationSound &&
+                      "animate__animated animate__pulse animate__faster"
+                    }`}
                     onClick={() => speechHandler(reverseShow ? reverse : text)}
                   >
                     <span style={{ marginRight: "4px" }}>
@@ -306,9 +325,14 @@ const MainScreen = () => {
             </div>
             <CopyToClipboard
               text={reverseShow ? reverse : text}
-              onCopy={() => setCopied(true)}
+              onCopy={handleCopy}
             >
-              <button className="main-screen__button">
+              <button
+                className={`main-screen__button ${
+                  animationCopy &&
+                  "animate__animated animate__pulse animate__faster"
+                }`}
+              >
                 <span style={{ marginRight: "4px" }}>
                   <img width={15} height={15} src={copy.src} />
                 </span>
