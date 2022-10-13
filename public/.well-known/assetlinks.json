@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.koneksi.kamnos",
+      "sha256_cert_fingerprints": [
+        "46:84:68:3C:C6:D8:79:05:FC:42:0C:7F:8B:17:CB:0A:17:AC:68:6D:5D:B5:0E:94:13:52:62:7D:B4:51:5A:78"
+      ]
+    }
+  }
+]

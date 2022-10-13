@@ -76,7 +76,7 @@ export default function Sidebar(props: SidebarProps) {
             </MenuItem>
             <MenuItem>
               Nilai Aplikasi
-              <Link href="#">
+              <Link href="https://play.google.com/store/apps/details?id=com.koneksi.kamnos">
                 <a></a>
               </Link>
             </MenuItem>
