@@ -11,9 +11,12 @@ import Image from "next/image";
 import swap from "./../public/swap.png";
 import swapWhite from "./../public/swap_white.png";
 import DashboardLayout from "../src/components/DashboardLayout";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const MainScreen = () => {
   const convertWordList = ["G", "S", "P", "U"];
+  const router = useRouter();
   const [text, setText]: any = useState();
   const [platform, setPlatform]: any = useState();
   const [originalText, setOriginalText]: any = useState();
@@ -29,6 +32,8 @@ const MainScreen = () => {
   const [keyValue, setKeyValue]: any = useState(0);
   const [voice, setVoice]: any = useState();
   const [languangeType, setLanguangeType]: any = useState();
+
+  console.log(router);
 
   useEffect(() => {
     setLanguangeType(convertWordList[indexSelected]?.toLowerCase());
@@ -318,22 +323,22 @@ const MainScreen = () => {
             {reverseShow ? reverse : text}
           </div>
           <div className="main-screen__copy">
-            <div id="button-sound">
-              {/* {platform !== undefined && platform === "Windows OS" && ( */}
-              <button
-                className={`${
-                  animationSound &&
-                  "animate__animated animate__pulse animate__faster"
-                }`}
-                onClick={() => speechHandler(reverseShow ? reverse : text)}
-              >
-                <span style={{ marginRight: "4px" }}>
-                  <img width={15} height={15} src={sound.src} />
-                </span>
-                Suara
-              </button>
-              {/* )} */}
-            </div>
+            {router?.asPath.split("?")[1] !== "mobile" && (
+              <div id="button-sound">
+                <button
+                  className={`${
+                    animationSound &&
+                    "animate__animated animate__pulse animate__faster"
+                  }`}
+                  onClick={() => speechHandler(reverseShow ? reverse : text)}
+                >
+                  <span style={{ marginRight: "4px" }}>
+                    <img width={15} height={15} src={sound.src} />
+                  </span>
+                  Suara
+                </button>
+              </div>
+            )}
             <CopyToClipboard
               text={reverseShow ? reverse : text}
               onCopy={handleCopy}
