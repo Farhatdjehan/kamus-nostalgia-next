@@ -28,7 +28,6 @@ export default function Sidebar(props: SidebarProps) {
         setCopied(false);
       }, 2000);
     }
-    console.log(copied);
   }, [copied]);
 
   const shareLink = (e: any) => {

@@ -33,8 +33,6 @@ const MainScreen = () => {
   const [voice, setVoice]: any = useState();
   const [languangeType, setLanguangeType]: any = useState();
 
-  console.log(router);
-
   useEffect(() => {
     setLanguangeType(convertWordList[indexSelected]?.toLowerCase());
   }, [indexSelected]);
@@ -112,13 +110,6 @@ const MainScreen = () => {
 
     return operatingSystem;
   }
-
-  useEffect(() => {
-    console.log(
-      window.navigator.appVersion.indexOf("Android") !== -1,
-      window.navigator.appVersion.indexOf("Linux") !== -1
-    );
-  }, []);
 
   const OS = (window) => {
     return getOperatingSystem(window); // <-- missing return
