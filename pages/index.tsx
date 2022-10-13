@@ -95,6 +95,9 @@ const MainScreen = () => {
     if (window.navigator.appVersion.indexOf("Mac") !== -1) {
       operatingSystem = "MacOS";
     }
+    if (window.navigator.appVersion.indexOf("Android") !== -1) {
+      operatingSystem = "Android";
+    }
     if (window.navigator.appVersion.indexOf("X11") !== -1) {
       operatingSystem = "UNIX OS";
     }
@@ -104,6 +107,13 @@ const MainScreen = () => {
 
     return operatingSystem;
   }
+
+  useEffect(() => {
+    console.log(
+      window.navigator.appVersion.indexOf("Android") !== -1,
+      window.navigator.appVersion.indexOf("Linux") !== -1
+    );
+  }, []);
 
   const OS = (window) => {
     return getOperatingSystem(window); // <-- missing return
@@ -120,9 +130,7 @@ const MainScreen = () => {
     setPlatform(OS(window));
   }, []);
 
-  useEffect(() => {
-    console.log(platform);
-  }, [platform]);
+  useEffect(() => {}, [platform]);
 
   const handleChange = (e) => {
     let tmp = e.target.value;
@@ -311,20 +319,20 @@ const MainScreen = () => {
           </div>
           <div className="main-screen__copy">
             <div id="button-sound">
-              {platform !== undefined && platform === "Windows OS" && (
-                <button
-                  className={`${
-                    animationSound &&
-                    "animate__animated animate__pulse animate__faster"
-                  }`}
-                  onClick={() => speechHandler(reverseShow ? reverse : text)}
-                >
-                  <span style={{ marginRight: "4px" }}>
-                    <img width={15} height={15} src={sound.src} />
-                  </span>
-                  Suara
-                </button>
-              )}
+              {/* {platform !== undefined && platform === "Windows OS" && ( */}
+              <button
+                className={`${
+                  animationSound &&
+                  "animate__animated animate__pulse animate__faster"
+                }`}
+                onClick={() => speechHandler(reverseShow ? reverse : text)}
+              >
+                <span style={{ marginRight: "4px" }}>
+                  <img width={15} height={15} src={sound.src} />
+                </span>
+                Suara
+              </button>
+              {/* )} */}
             </div>
             <CopyToClipboard
               text={reverseShow ? reverse : text}
