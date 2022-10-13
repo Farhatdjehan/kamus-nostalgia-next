@@ -1,9 +1,11 @@
 @import "./variables";
+* {
+  font-family: "Poppins", sans-serif !important;
+}
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "Poppins", sans-serif !important;
   font-size: 16px;
   height: 100%;
   line-height: 150%;
@@ -87,7 +89,7 @@ button:disabled {
   // margin-top: 12px;
 }
 .main-screen__input {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   position: relative;
 }
 .main-screen__input > input {
@@ -114,7 +116,7 @@ button:disabled {
 }
 .main-screen__selector-container {
   display: flex;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 .main-screen__selector-input {
   position: relative;
@@ -141,6 +143,16 @@ button:disabled {
 .main-screen__active {
   background-color: #fff;
   color: #be2239;
+  width: 125px;
+  & .active-label {
+    margin-left: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #be2239;
+    border-radius: 24px;
+    padding: 2px 12px;
+    color: #fff;
+  }
 }
 .main-screen__result {
   background-color: #fff;
@@ -186,6 +198,7 @@ button:disabled {
   border-radius: 8px;
   transition: 1s;
   bottom: 16px;
+  z-index: 3;
   box-shadow: rgb(17 12 46 / 15%) 0px 48px 100px 0px;
   margin: 0 auto;
   left: 0;
@@ -303,6 +316,29 @@ button:disabled {
   .breadcrumb-page__active {
     color: $blue-primary;
   }
+}
+
+button,
+::placeholder {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.ReactModal__Overlay {
+  z-index: 2;
+  background-color: rgb(65 64 64 / 75%) !important;
+}
+
+.sharelink {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 12px;
+  line-height: 16px;
+}
+
+.toast-copy {
+  position: absolute;
+  z-index: 3;
+  bottom: 0;
 }
 
 @import "utils";

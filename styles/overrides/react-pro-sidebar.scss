@@ -2,7 +2,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap");
 
 .pro-sidebar {
-  font-family: "Work Sans", sans-serif;
   color: $black-primary;
   box-shadow: $box-shadow;
   font-weight: 400;
@@ -17,7 +16,7 @@
 
   .pro-menu {
     .pro-menu-item {
-      padding: 0 1.5rem;
+      // margin: 0 1.5rem;
       &.active {
         color: $white-primary;
         font-weight: 700;

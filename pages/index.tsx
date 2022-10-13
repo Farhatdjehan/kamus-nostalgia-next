@@ -83,7 +83,7 @@ const MainScreen = () => {
       if ("speechSynthesis" in window) {
         window.speechSynthesis.speak(msg);
       }
-      // setAnimationSound(true);
+      setAnimationSound(true);
     }
   };
 
@@ -262,7 +262,9 @@ const MainScreen = () => {
             )}
           </div>
           <div className="main-screen__selector">
-            <div className="main-screen__selector-label">Tipe Bahasa</div>
+            <div className="main-screen__selector-label">
+              Translate Ke Bahasa Apa?
+            </div>
             <div className="main-screen__selector-container">
               {convertWordList.map((item, index) => {
                 return (
@@ -276,6 +278,9 @@ const MainScreen = () => {
                     }`}
                   >
                     {item}
+                    {indexSelected == index && (
+                      <span className="active-label">Bahasa {item}</span>
+                    )}
                   </div>
                 );
               })}
