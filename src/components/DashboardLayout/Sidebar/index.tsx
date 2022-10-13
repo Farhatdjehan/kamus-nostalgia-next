@@ -72,7 +72,7 @@ export default function Sidebar(props: SidebarProps) {
           <Menu className={`menu`}>
             <MenuItem>
               Beri Masukkan
-              <Link href="https://form.asana.com/?k=bAQOG6X_k7d0HA6cZjOfLA&d=1200494741159113">
+              <Link href="https://api.whatsapp.com/send?phone=+6282311888360&text=Aku%20mau%20kasih%20masukkan%20dong!">
                 <a></a>
               </Link>
             </MenuItem>
