@@ -335,6 +335,37 @@ button,
   line-height: 16px;
 }
 
+.wrapper-btn {
+  display: flex;
+  flex-direction: column;
+}
+
+.or-text {
+  text-align: center;
+  padding: 16px 0;
+  color: rgba(0, 0, 0, 0.471);
+  font-size: 14px;
+}
+
+.btn {
+  border: none;
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  color: #fff;
+  font-weight: 600;
+  &.twitter {
+    background-color: #1d9bf0;
+  }
+  &.facebook {
+    background-color: #3b5998;
+  }
+  &.whatsapp {
+    background-color: #10c045;
+  }
+}
+
 .toast-copy {
   position: absolute;
   z-index: 3;
