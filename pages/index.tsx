@@ -2,9 +2,10 @@
 // @ts-nocheck
 
 import React, { useEffect, useState } from "react";
-import { convertWord } from "../src/helpers/common";
+import { convertWord, setCookie } from "../src/helpers/common";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import sound from "./../public/sound.png";
+import save from "./../public/save.png";
 import "animate.css";
 import copy from "./../public/copy.png";
 import Image from "next/image";
@@ -62,6 +63,11 @@ const MainScreen = () => {
     }, 1000);
   }, []);
 
+  // useEffect(() => {
+  //   console.log(originalText, "<=====");
+  //   console.log(text, reverse);
+  // }, [originalText, text, reverse]);
+
   useEffect(() => {
     if (text !== undefined) {
       if (reverseShow) {
@@ -71,6 +77,7 @@ const MainScreen = () => {
       } else {
         let reset: any = document.getElementById("input");
         reset.value = originalText;
+        // setReverse(text);
       }
     }
   }, [reverseShow, text, originalText]);
@@ -125,8 +132,6 @@ const MainScreen = () => {
   useEffect(() => {
     setPlatform(OS(window));
   }, []);
-
-  useEffect(() => {}, [platform]);
 
   const handleChange = (e) => {
     let tmp = e.target.value;
@@ -216,6 +221,10 @@ const MainScreen = () => {
     }
   };
 
+  useEffect(() => {
+    console.log(reverse === undefined && text === undefined);
+  }, [reverse, text]);
+
   const reverseWord = () => {
     setReverseShow(!reverseShow);
     // setText();
@@ -240,20 +249,70 @@ const MainScreen = () => {
     setAnimationCopy(true);
   };
 
+  const handlePush = () => {
+    if (reverseShow) {
+      setCookie("dataTemplate", JSON.stringify(reverse), 99);
+    } else {
+      setCookie("dataTemplate", JSON.stringify(text), 99);
+    }
+    router.push("/template");
+  };
+
   return (
     <DashboardLayout pageTitle="Kamus Nostalgia">
       <div key={keyValue} id="kamnos" className="main-screen__dictionary">
         <div className="main-screen__container">
           <div className="main-screen__input">
-            <input
+            <textarea
               disabled={disable ? disable : false}
               type="text"
               id="input"
-              placeholder="Masukkan Kata"
+              placeholder="Tulis surat kamu..."
               name="input"
               onChange={handleChange}
               autoFocus
+              rows={3}
             />
+            <div className="main-screen__selector">
+              <div className="main-screen__selector-label">
+                Translate Kemana?
+              </div>
+              <div className="main-screen__selector-container">
+                {convertWordList.map((item, index) => {
+                  return (
+                    <div
+                      id={index}
+                      key={index}
+                      onClick={handleSelect}
+                      className={`main-screen__selector-input ${
+                        indexSelected == index &&
+                        "main-screen__active animate__animated animate__pulse animate__faster"
+                      }`}
+                    >
+                      {item}
+                      {indexSelected == index && (
+                        <span className="active-label">Bahasa {item}</span>
+                      )}
+                    </div>
+                  );
+                })}
+                <div
+                  className={`main-screen__result-reverse ${
+                    reverseShow &&
+                    "active-reverse animate__animated animate__pulse animate__faster"
+                  }`}
+                  onClick={reverseWord}
+                >
+                  {/* Reverse{"  "} */}
+                  {reverseShow ? (
+                    <Image src={swap} width={18} height={8} />
+                  ) : (
+                    <Image src={swapWhite} width={18} height={8} />
+                  )}
+                </div>
+              </div>
+            </div>
+
             {text && (
               <div className="main-screen__times" onClick={handleReset}>
                 ×
@@ -265,92 +324,67 @@ const MainScreen = () => {
               </div>
             )}
           </div>
-          <div className="main-screen__selector">
-            <div className="main-screen__selector-label">
-              Translate Ke Bahasa Apa?
-            </div>
-            <div className="main-screen__selector-container">
-              {convertWordList.map((item, index) => {
-                return (
-                  <div
-                    id={index}
-                    key={index}
-                    onClick={handleSelect}
-                    className={`main-screen__selector-input ${
-                      indexSelected == index &&
-                      "main-screen__active animate__animated animate__pulse animate__faster"
-                    }`}
-                  >
-                    {item}
-                    {indexSelected == index && (
-                      <span className="active-label">Bahasa {item}</span>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
         </div>
         <div className="main-screen__result">
           <div className="main-screen__result-wrapper">
             <div className="main-screen__result-label">Hasil :</div>
-
-            <div
-              className={`main-screen__result-reverse ${
-                reverseShow &&
-                "active-reverse animate__animated animate__pulse animate__faster"
-              }`}
-              onClick={reverseWord}
-            >
-              Reverse{"  "}
-              {reverseShow ? (
-                <Image src={swapWhite} width={18} height={8} />
-              ) : (
-                <Image src={swap} width={18} height={8} />
-              )}
-            </div>
           </div>
           <div className="main-screen__result-convert">
             {reverseShow ? reverse : text}
           </div>
           <div className="main-screen__copy">
-            {router?.asPath.split("?")[1] !== "mobile" && (
-              <div id="button-sound">
+            <div className="main-button__wrapper">
+              {router?.asPath.split("?")[1] !== "mobile" && (
+                <div id="button-sound">
+                  <button
+                    className={`main-screen__button ${
+                      animationSound &&
+                      "animate__animated animate__pulse animate__faster"
+                    }`}
+                    onClick={() => speechHandler(reverseShow ? reverse : text)}
+                  >
+                    <span style={{ display: "flex" }}>
+                      <img width={15} height={15} src={sound.src} />
+                    </span>
+                  </button>
+                </div>
+              )}
+              <CopyToClipboard
+                text={reverseShow ? reverse : text}
+                onCopy={handleCopy}
+              >
                 <button
-                  className={`${
-                    animationSound &&
+                  className={`main-screen__button ${
+                    animationCopy &&
                     "animate__animated animate__pulse animate__faster"
                   }`}
-                  onClick={() => speechHandler(reverseShow ? reverse : text)}
                 >
-                  <span style={{ marginRight: "4px" }}>
-                    <img width={15} height={15} src={sound.src} />
+                  <span style={{ display: "flex" }}>
+                    <img width={15} height={15} src={copy.src} />
                   </span>
-                  Suara
+                  {/* Salin */}
                 </button>
-              </div>
-            )}
-            <CopyToClipboard
-              text={reverseShow ? reverse : text}
-              onCopy={handleCopy}
-            >
+              </CopyToClipboard>
+            </div>
+            <div>
+              {/* <Link href={`/template`} passHref> */}
               <button
-                className={`main-screen__button ${
-                  animationCopy &&
-                  "animate__animated animate__pulse animate__faster"
-                }`}
+                disabled={
+                  reverse === undefined && text === undefined ? true : false
+                }
+                onClick={handlePush}
+                className="main-screen__button"
               >
-                <span style={{ marginRight: "4px" }}>
-                  <img width={15} height={15} src={copy.src} />
-                </span>
-                Salin
+                Pilih Template
+                <span style={{ display: "flex", marginLeft: "8px" }}>→</span>
               </button>
-            </CopyToClipboard>
+              {/* </Link> */}
+            </div>
           </div>
           {copied && (
             <div className="main-screen__toast animate__animated animate__bounceInUp animate__faster">
               <div className="toast-text">
-                {reverse === undefined || text === undefined
+                {reverse === undefined && text === undefined
                   ? "Masukkan Kata Dulu!"
                   : "Berhasil menyalin!"}
               </div>
