@@ -99,7 +99,7 @@ button:disabled {
   border: none;
   resize: none;
   overflow: hidden;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 // textarea::placeholder {
 //   visibility: hidden;
@@ -310,7 +310,7 @@ button:disabled {
 }
 
 .pro-sidebar .pro-menu {
-  padding-top: 24px !important;
+  padding-top: 24px 8px !important;
 }
 
 .breadcrumb-page {

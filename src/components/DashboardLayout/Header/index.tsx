@@ -16,33 +16,12 @@ interface HeaderProps {
 
 export default function Header(props: HeaderProps) {
   const { handleToggle, landing } = props;
+  const router = useRouter();
   const src = `https://satukelas-fe-asset.ap-south-1.linodeobjects.com/profile1.png`;
+  let pathname = router.asPath.split("/");
 
-  const renderNavMenu = () => {
-    return (
-      <>
-        <li className={styles.navbarMenu}>
-          <Link href="/">
-            <a>Beranda</a>
-          </Link>
-        </li>
-        <li className={styles.navbarMenu}>
-          <Link href={`/dashboard/pengumuman`}>
-            <a>Pengumuman</a>
-          </Link>
-        </li>
-        <li className={styles.navbarMenu}>
-          <Link href="/dashboard/global">
-            <a>Dashboard CMS</a>
-          </Link>
-        </li>
-        <li className={styles.navbarMenu}>
-          <Link href="#">
-            <a>Dashboard LMS</a>
-          </Link>
-        </li>
-      </>
-    );
+  const handleBack = () => {
+    router.back();
   };
 
   return (
@@ -50,7 +29,12 @@ export default function Header(props: HeaderProps) {
       <header className={styles.header}>
         <div className={styles.mobile}>
           <div className={styles.logoWrapper}>
-            <div className="main-screen__title">Kamnos</div>
+            {pathname[1] === "template" && (
+              <div style={{ fontWeight: 600 }} onClick={handleBack}>
+                {"<"}
+              </div>
+            )}
+            {/* <div className="main-screen__title">Kamnos</div> */}
             {/* <Image src={logoCompanyWhite} alt={``} height={24} /> */}
           </div>
           <div onClick={() => handleToggle(true)} className={styles.hamburger}>

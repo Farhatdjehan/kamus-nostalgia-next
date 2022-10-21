@@ -273,6 +273,7 @@ const MainScreen = () => {
               autoFocus
               rows={3}
             />
+           
             <div className="main-screen__selector">
               <div className="main-screen__selector-label">
                 Translate Kemana?

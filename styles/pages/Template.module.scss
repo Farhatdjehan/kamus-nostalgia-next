@@ -1,15 +1,35 @@
 .wrapperTemplate {
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: space-around;
   margin: 0 16px;
+  .label {
+    font-size: 16px;
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .inputSender {
+    margin-bottom: 20px;
+    width: 100%;
+    height: 50px;
+    border-radius: 16px;
+    border: none;
+    padding: 16px;
+    &:last-of-type {
+      margin-bottom: 12px;
+    }
+  }
+  .showCheck {
+    color: #fff;
+    margin-bottom: 50px;
+  }
   .mainTitle {
-    font-size: 28px;
+    font-size: 16px;
     font-weight: 700;
     color: white;
-    margin-bottom: 12px;
-    text-align: center;
+    margin-bottom: 16px;
   }
   .mainSubtitle {
     font-size: 16px;
@@ -20,7 +40,8 @@
   .wrapperCard {
     display: flex;
     width: 100%;
-    overflow: scroll;
+    overflow-x: scroll;
+    margin-bottom: 32px;
     // &::before {
     //   background: linear-gradient(
     //     180deg,
@@ -79,6 +100,7 @@
     width: 100%;
     display: flex;
     align-items: center;
+    margin-bottom: 42px;
   }
 }
 
@@ -87,27 +109,47 @@
   bottom: 0;
   .templateImage {
   }
+  .letterText {
+    font-size: 10px;
+    max-width: 258px;
+    margin: auto;
+    top: 26px;
+    left: 24px;
+    line-height: 21px;
+    position: absolute;
+    font-weight: 600;
+  }
+  .letterForText {
+    font-size: 10px;
+    max-width: 258px;
+    margin: auto;
+    top: 44px;
+    left: 24px;
+    line-height: 21px;
+    font-weight: 600;
+    position: absolute;
+  }
   .templateText {
     position: absolute;
-    max-width: 280px;
+    max-width: 258px;
     margin: auto;
-    top: 46px;
-    left: 36px;
+    top: 82px;
+    left: 24px;
     line-height: 21px;
     font-size: 10px;
   }
-  .buttonSave {
-    margin-top: 16px;
-    padding: 12px;
-    align-self: flex-start;
-    justify-content: center;
-    border: none !important;
-    border-radius: 8px;
-    color: white;
-    font-weight: 600;
-    background-color: #be2239;
-    width: 100%;
-    display: flex;
-    align-items: center;
-  }
+}
+.buttonSave {
+  margin-top: 16px;
+  padding: 12px;
+  align-self: flex-start;
+  justify-content: center;
+  border: none !important;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  background-color: #be2239;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }

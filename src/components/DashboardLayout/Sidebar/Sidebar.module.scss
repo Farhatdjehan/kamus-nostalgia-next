@@ -1,9 +1,18 @@
-@import './../../../../styles/variables';
+@import "./../../../../styles/variables";
 $breakpoint-tablet: 768px;
 
-.sidebar{
-    .logoWrapper{
-        text-align:center;
-        margin: 40px 0 1rem;
-    }
+.sidebar {
+  .logoWrapper {
+    text-align: center;
+    margin: 40px 0 1rem;
+  }
+  .header {
+    height: 80px;
+    padding: 16px 35px 16px 20px;
+    background-color: $red-primary;
+    display: flex;
+    align-items: flex-end;
+    color: #fff;
+    font-weight: 700;
+  }
 }

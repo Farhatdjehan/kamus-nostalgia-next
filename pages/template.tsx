@@ -14,6 +14,8 @@ export default function Template() {
   const [idData, setIdData]: any = useState();
   const [saveTemplate, setSaveTemplate]: any = useState();
   const [dataCookie, setDataCookie]: any = useState();
+  const [data, setData]: any = useState();
+  const [showForm, setShowForm]: any = useState(false);
   const [templateData, setTemplateData]: any = useState([]);
 
   const customStyles = {
@@ -84,15 +86,52 @@ export default function Template() {
     });
   };
 
+  const handleChange = (e: any) => {
+    e.preventDefault();
+    const newData = { ...data };
+    newData[e.target.id] = e.target.value;
+    setData(newData);
+  };
+
+  const handleCheck = (e: any) => {
+    let data: any = document.querySelector("#receive");
+    data?.checked;
+    setShowForm(data?.checked);
+  };
+
   return (
     <DashboardLayout pageTitle="Pilih Template">
       <div className={styles.wrapperTemplate}>
         <div>
-          <div className={styles.mainTitle}>Pilih Template</div>
-          <div className={styles.mainSubtitle}>
-            Pilih salah satu template yang ada!
+          <div className={styles.label}>Pengirim Surat</div>
+          <input
+            onChange={handleChange}
+            className={styles.inputSender}
+            id="sender"
+            name="sender"
+            placeholder="Masukkin nama kamu disini"
+          />
+          <div className={styles.label}>Penerima Surat</div>
+          <input
+            onChange={handleChange}
+            className={styles.inputSender}
+            id="receive_name"
+            name="receive_name"
+            placeholder="Masukkin nama penerima disini"
+          />
+          <div className={styles.showCheck}>
+            <input
+              onChange={handleCheck}
+              type="checkbox"
+              id="receive"
+              name="receive"
+            />
+            <label htmlFor="receive">Sembunyikan Penerima?</label>
           </div>
         </div>
+
+        <div className={styles.mainTitle}>Pilih Template</div>
+
         <div className={styles.wrapperCard}>
           {template.map((item, index) => {
             return (
@@ -124,32 +163,41 @@ export default function Template() {
           style={customStyles}
         >
           {templateData[idData] && (
-            <div ref={exportRef} className={styles.wrapperImage}>
-              <div className={styles.templateImage}>
-                <Image
-                  src={templateData[idData]}
-                  objectFit="cover"
-                  width={300}
-                  height={420}
-                  layout="responsive"
-                />
+            <>
+              <div ref={exportRef} className={styles.wrapperImage}>
+                <div className={styles.templateImage}>
+                  <Image
+                    src={templateData[idData]}
+                    objectFit="cover"
+                    width={300}
+                    height={420}
+                    layout="responsive"
+                  />
+                </div>
+                <div className={styles.letterText}>Dari : {data?.sender}</div>
+                <div className={styles.letterForText}>
+                  Untuk : {showForm ? "******" : data?.receive_name}
+                </div>
+                <div className={styles.templateText}>{dataCookie}</div>
               </div>
-              <div className={styles.templateText}>{dataCookie}</div>
               <button
                 className={styles.buttonSave}
                 disabled={templateData[idData] !== undefined ? false : true}
                 onClick={() =>
-                  exportAsImage(exportRef?.current, `Love Letter 1`)
+                  exportAsImage(
+                    exportRef?.current,
+                    `Surat Untuk Kamu - ${data?.sender}`
+                  )
                 }
               >
                 Simpan
               </button>
-            </div>
+            </>
           )}
         </Modal>
 
         <div>
-          <button onClick={() => setSaveTemplate(!saveTemplate)}>
+          <button disabled={templateData[idData] !== undefined ? false : true} onClick={() => setSaveTemplate(!saveTemplate)}>
             Lihat Surat
           </button>
         </div>

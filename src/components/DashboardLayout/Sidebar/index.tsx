@@ -1,4 +1,10 @@
-import { ProSidebar, SidebarContent, Menu, MenuItem } from "react-pro-sidebar";
+import {
+  ProSidebar,
+  SidebarContent,
+  Menu,
+  MenuItem,
+  SidebarHeader,
+} from "react-pro-sidebar";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import styles from "./Sidebar.module.scss";
 import { useEffect, useState } from "react";
@@ -68,6 +74,9 @@ export default function Sidebar(props: SidebarProps) {
   return (
     <aside className={styles.sidebar}>
       <ProSidebar breakPoint="xxl" toggled={toggle} onToggle={handleToggle}>
+        <SidebarHeader>
+          <div className={styles.header}>Kamnos</div>
+        </SidebarHeader>
         <SidebarContent>
           <Menu className={`menu`}>
             <MenuItem>
