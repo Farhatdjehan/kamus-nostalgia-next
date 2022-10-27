@@ -126,8 +126,8 @@ button:disabled {
 }
 .main-screen__selector-input {
   position: relative;
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   margin-right: 12px;
   background-color: #be2239;
   border-radius: 25px;
@@ -152,11 +152,12 @@ button:disabled {
   width: 125px;
   & .active-label {
     margin-left: 8px;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 600;
+    line-height: 20px;
     background: #be2239;
     border-radius: 24px;
-    padding: 2px 12px;
+    padding: 0px 12px;
     color: #fff;
   }
 }
