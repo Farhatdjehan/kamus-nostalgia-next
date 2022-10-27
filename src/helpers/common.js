@@ -96,7 +96,17 @@ export const convertWord = (tmp, setValue, type) => {
     setValue(result[1]);
 }
 
-export const exportAsImage = async (element, imageFileName) => {
+function download(content, fileName, contentType) {
+    var a = document.createElement("a");
+    var file = new Blob([content], { type: contentType });
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+}
+
+export const exportAsImage = async (element, json, imageFileName) => {
+    let generate = JSON.stringify(json)
+    download(generate, 'json.txt', 'text/plain');
     const html = document.getElementsByTagName("html")[0];
     const body = document.getElementsByTagName("body")[0];
     let htmlWidth = html.clientWidth;

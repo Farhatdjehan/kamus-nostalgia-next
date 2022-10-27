@@ -14,6 +14,7 @@ export default function Template() {
   const [idData, setIdData]: any = useState();
   const [saveTemplate, setSaveTemplate]: any = useState();
   const [dataCookie, setDataCookie]: any = useState();
+  const [json, setJson]: any = useState();
   const [data, setData]: any = useState();
   const [showForm, setShowForm]: any = useState(false);
   const [templateData, setTemplateData]: any = useState([]);
@@ -33,6 +34,33 @@ export default function Template() {
   };
 
   useEffect(() => {
+    let tmp: any = {
+      id: 1,
+      pengirim: {
+        id: 1,
+        nama: "",
+      },
+      penerima: {
+        id: 1,
+        nama: "",
+        isVisible: false,
+      },
+      content: "",
+      template_id: "",
+    };
+
+    tmp.pengirim.nama = data?.sender;
+    tmp.penerima.nama = data?.receive_name;
+    tmp.penerima.isVisible = showForm;
+    tmp.content = dataCookie;
+    tmp.template_id = 1;
+
+    if (saveTemplate) {
+      setJson(tmp);
+    }
+  }, [saveTemplate, dataCookie]);
+
+  useEffect(() => {
     if (getCookie("dataTemplate") !== "") {
       let tmp = getCookie("dataTemplate");
       if (tmp !== undefined) {
@@ -48,7 +76,6 @@ export default function Template() {
   useEffect(() => {
     let arr = [];
     for (let i = 0; i < template?.length; i++) {
-      //   console.log("<");
       arr.push(template[i]);
       setTemplateData(arr);
     }
@@ -59,32 +86,31 @@ export default function Template() {
     setIdData(index);
   };
 
-  const save = (file: string, fileName: string) => {
-    const linkSource = `${file}`;
-    const downloadLink = document.createElement("a");
-    document.body.appendChild(downloadLink);
+  // const save = (file: string, fileName: string) => {
+  //   const linkSource = `${file}`;
+  //   const downloadLink = document.createElement("a");
+  //   document.body.appendChild(downloadLink);
+  //   downloadLink.href = linkSource;
+  //   downloadLink.download = fileName;
+  //   downloadLink.click();
+  // };
 
-    downloadLink.href = linkSource;
-    downloadLink.download = fileName;
-    downloadLink.click();
-  };
+  // const dataURLtoFile = (dataurl: any, filename: any) => {
+  //   let atobData: any = atob;
+  //   var arr = dataurl.split(","),
+  //     mime = arr[0].match(/:(.*?);/)[1],
+  //     bstr = window.atob(arr[1]),
+  //     n = bstr.length,
+  //     u8arr = new Uint8Array(n);
 
-  const dataURLtoFile = (dataurl: any, filename: any) => {
-    let atobData: any = atob;
-    var arr = dataurl.split(","),
-      mime = arr[0].match(/:(.*?);/)[1],
-      bstr = window.atob(arr[1]),
-      n = bstr.length,
-      u8arr = new Uint8Array(n);
+  //   while (n--) {
+  //     u8arr[n] = bstr.charCodeAt(n);
+  //   }
 
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-
-    return new File([u8arr], filename, {
-      type: mime,
-    });
-  };
+  //   return new File([u8arr], filename, {
+  //     type: mime,
+  //   });
+  // };
 
   const handleChange = (e: any) => {
     e.preventDefault();
@@ -174,11 +200,17 @@ export default function Template() {
                     layout="responsive"
                   />
                 </div>
+                <div className={styles.letterId}>ID : 1</div>
                 <div className={styles.letterText}>Dari : {data?.sender}</div>
                 <div className={styles.letterForText}>
                   Untuk : {showForm ? "******" : data?.receive_name}
                 </div>
                 <div className={styles.templateText}>{dataCookie}</div>
+                <div className={styles.templateUrl}>
+                  Mau tau lengkapnya? cek
+                  <br />
+                  https://kamus-nostalgia.vercel.app/preview?id=1&t-id=1
+                </div>
               </div>
               <button
                 className={styles.buttonSave}
@@ -186,6 +218,7 @@ export default function Template() {
                 onClick={() =>
                   exportAsImage(
                     exportRef?.current,
+                    json,
                     `Surat Untuk Kamu - ${data?.sender}`
                   )
                 }
@@ -196,8 +229,11 @@ export default function Template() {
           )}
         </Modal>
 
-        <div>
-          <button disabled={templateData[idData] !== undefined ? false : true} onClick={() => setSaveTemplate(!saveTemplate)}>
+        <div className={styles.wrapperSee}>
+          <button
+            disabled={templateData[idData] !== undefined ? false : true}
+            onClick={() => setSaveTemplate(!saveTemplate)}
+          >
             Lihat Surat
           </button>
         </div>
