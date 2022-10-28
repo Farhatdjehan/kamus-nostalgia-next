@@ -71,6 +71,19 @@ export default function Sidebar(props: SidebarProps) {
     window.open(share, "_blank")?.focus();
   };
 
+  const redirectOpen = (e: any, id: number) => {
+    e.preventDefault();
+    let share;
+    if (id === 1) {
+      share =
+        "https://api.whatsapp.com/send?phone=+6282311888360&text=Aku%20mau%20kasih%20masukkan%20dong!";
+    } else {
+      share =
+        "https://play.google.com/store/apps/details?id=com.koneksi.kamnos";
+    }
+    window.open(share, "_blank")?.focus();
+  };
+
   return (
     <aside className={styles.sidebar}>
       <ProSidebar breakPoint="xxl" toggled={toggle} onToggle={handleToggle}>
@@ -79,9 +92,9 @@ export default function Sidebar(props: SidebarProps) {
         </SidebarHeader>
         <SidebarContent>
           <Menu className={`menu`}>
-            <MenuItem>
+            <MenuItem onClick={(e) => redirectOpen(e, 1)}>
               Beri Masukkan
-              <Link href="https://api.whatsapp.com/send?phone=+6282311888360&text=Aku%20mau%20kasih%20masukkan%20dong!">
+              <Link href="#">
                 <a></a>
               </Link>
             </MenuItem>
@@ -91,9 +104,9 @@ export default function Sidebar(props: SidebarProps) {
                 <a></a>
               </Link>
             </MenuItem>
-            <MenuItem>
+            <MenuItem onClick={(e) => redirectOpen(e, 2)}>
               Nilai Aplikasi
-              <Link href="https://play.google.com/store/apps/details?id=com.koneksi.kamnos">
+              <Link href="#">
                 <a></a>
               </Link>
             </MenuItem>
