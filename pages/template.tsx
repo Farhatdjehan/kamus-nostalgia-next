@@ -6,6 +6,7 @@ import styles from "./../styles/pages/Template.module.scss";
 import { template } from "./../src/helpers/imageTemplate";
 import { exportAsImage, getCookie } from "../src/helpers/common";
 import { useRouter } from "next/router";
+import axios from "axios";
 import Modal from "react-modal";
 
 export default function Template() {
@@ -14,6 +15,7 @@ export default function Template() {
   const [idData, setIdData]: any = useState();
   const [saveTemplate, setSaveTemplate]: any = useState();
   const [dataCookie, setDataCookie]: any = useState();
+  const [link, setLink]: any = useState();
   const [json, setJson]: any = useState();
   const [data, setData]: any = useState();
   const [showForm, setShowForm]: any = useState(false);
@@ -125,8 +127,23 @@ export default function Template() {
     setShowForm(data?.checked);
   };
 
+  const fetchData = async (value: string) => {
+    try {
+      const response = await axios(
+        `https://api.shrtco.de/v2/shorten?url=${value}`
+      );
+      setLink(response.data.result.full_short_link);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  useEffect(() => {
+    fetchData("https://kamus-nostalgia.vercel.app/preview?id=1&template-id=1");
+  }, []);
+
   return (
     <DashboardLayout pageTitle="Pilih Template">
+      <input id="browse" type="file" multiple />
       <div className={styles.wrapperTemplate}>
         <div>
           <div className={styles.label}>Pengirim Surat</div>
@@ -200,19 +217,14 @@ export default function Template() {
                     layout="responsive"
                   />
                 </div>
-                <div className={styles.letterId}>ID : 1</div>
+                {/* <div className={styles.letterId}>ID : 1</div> */}
                 <div className={styles.letterText}>Dari : {data?.sender}</div>
                 <div className={styles.letterForText}>
                   Untuk : {showForm ? "******" : data?.receive_name}
                 </div>
                 <div className={styles.templateText}>{dataCookie}</div>
-                <div className={styles.templateUrl}>
-                  Mau tau lengkapnya? cek
-                  <br />
-                  https://kamus-nostalgia.vercel.app/preview?id=1&t-id=1
-                </div>
               </div>
-              <button
+              {/* <button
                 className={styles.buttonSave}
                 disabled={templateData[idData] !== undefined ? false : true}
                 onClick={() =>
@@ -222,9 +234,20 @@ export default function Template() {
                     `Surat Untuk Kamu - ${data?.sender}`
                   )
                 }
+              > */}
+              <a
+                className={styles.buttonSave}
+                href={`https://web.whatsapp.com/send?text=Hai,%20Aku%20ada%20sesuatu%20untuk%20kamu!.%20Cek%20link%20ini%20:%20${link}`}
+                // onClick={() =>
+                //   exportAsImage(
+                //     exportRef?.current,
+                //     `Surat Untuk Kamu - ${data?.sender}`
+                //   )
+                // }
               >
-                Simpan
-              </button>
+                Share
+              </a>
+              {/* </button> */}
             </>
           )}
         </Modal>
