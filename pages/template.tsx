@@ -6,6 +6,8 @@ import styles from "./../styles/pages/Template.module.scss";
 import { template } from "./../src/helpers/imageTemplate";
 import { exportAsImage, getCookie } from "../src/helpers/common";
 import { useRouter } from "next/router";
+import { app, database } from "./../firebase";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 import axios from "axios";
 import Modal from "react-modal";
 
@@ -19,7 +21,24 @@ export default function Template() {
   const [json, setJson]: any = useState();
   const [data, setData]: any = useState();
   const [showForm, setShowForm]: any = useState(false);
+  const [idMessages, setIdMessages]: any = useState();
   const [templateData, setTemplateData]: any = useState([]);
+
+  useEffect(() => {
+    getNotes();
+  }, []);
+
+  const dbInstance = collection(database, "messages");
+
+  const getNotes = () => {
+    getDocs(dbInstance).then((data) => {
+      console.log(
+        data.docs.map((item) => {
+          return { ...item.data(), id: item.id };
+        })
+      );
+    });
+  };
 
   const customStyles = {
     content: {
@@ -70,6 +89,12 @@ export default function Template() {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (link) {
+      router.push(link);
+    }
+  }, [link]);
 
   useLayoutEffect(() => {
     console.log(exportRef?.current); // { current: <h1_object> }
@@ -132,15 +157,31 @@ export default function Template() {
       const response = await axios(
         `https://api.shrtco.de/v2/shorten?url=${value}`
       );
-      setLink(response.data.result.full_short_link);
+      if (response !== undefined) {
+        setLink(
+          `https://web.whatsapp.com/send?text=Hai,%20Aku%20ada%20sesuatu%20untuk%20kamu!.%20Cek%20link%20ini%20:%20${response.data.result.full_short_link}`
+        );
+      }
     } catch (e) {
       console.log(e);
     }
   };
-  useEffect(() => {
-    fetchData("https://kamus-nostalgia.vercel.app/preview?id=1&template-id=1");
-  }, []);
 
+  const handleSave = () => {
+    addDoc(dbInstance, {
+      sender: data?.sender,
+      receiver: data?.receive_name,
+      template_id: idData,
+      desc: dataCookie,
+    }).then((value: any) => {
+      fetchData(
+        `https://kamus-nostalgia.vercel.app/preview?id=${value._key.path.segments[1]}`
+      );
+
+      // setIdMessages(value._key.path.segments[1]);
+      // router.reload();
+    });
+  };
   return (
     <DashboardLayout pageTitle="Pilih Template">
       <input id="browse" type="file" multiple />
@@ -235,18 +276,17 @@ export default function Template() {
                   )
                 }
               > */}
-              <a
+              <div
                 className={styles.buttonSave}
-                href={`https://web.whatsapp.com/send?text=Hai,%20Aku%20ada%20sesuatu%20untuk%20kamu!.%20Cek%20link%20ini%20:%20${link}`}
-                // onClick={() =>
-                //   exportAsImage(
-                //     exportRef?.current,
-                //     `Surat Untuk Kamu - ${data?.sender}`
-                //   )
-                // }
+                // `}
+                onClick={handleSave}
+                // exportAsImage(
+                //   exportRef?.current,
+                //   `Surat Untuk Kamu - ${data?.sender}`
+                // )
               >
-                Share
-              </a>
+                Share Ke Whatsapp
+              </div>
               {/* </button> */}
             </>
           )}

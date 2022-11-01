@@ -161,6 +161,15 @@ button:disabled {
     color: #fff;
   }
 }
+.loading_messages {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: white;
+  font-weight: 600;
+}
 .main-screen__result {
   background-color: #fff;
   border-top-left-radius: 24px;

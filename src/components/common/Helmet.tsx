@@ -28,10 +28,7 @@ export default function Helmet(props: HelmetProps) {
           property="og:description"
           content="Nostalgia bersama bahasa G yang sempet booming yuk!"
         />
-        <meta
-          property="og:image"
-          content="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1280px-Image_created_with_a_mobile_phone.png"
-        />
+        <meta property="og:image" content={image} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
