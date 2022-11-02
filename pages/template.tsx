@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,6 +26,7 @@ export default function Template() {
   const [share, setShare]: any = useState(false);
   const [socialMedia, setSocialMedia]: any = useState();
   const [dataCookie, setDataCookie]: any = useState();
+  const [desktop, setDesktop]: any = useState();
   const [dataImage, setDataImage]: any = useState();
   const [link, setLink]: any = useState();
   const [json, setJson]: any = useState();
@@ -74,11 +77,16 @@ export default function Template() {
     ) {
       randomize();
     }
+    console.log(
+      saveTemplate &&
+        dataList &&
+        dataList
+          .map((item: any) => item.message_id)
+          .indexOf(parseInt(randomizeNumber)) !== -1
+    );
   }, [dataList, saveTemplate]);
 
-  useEffect(() => {
-    console.log(dataCookie?.original);
-  }, [dataCookie]);
+  useEffect(() => {}, [dataCookie]);
 
   useEffect(() => {
     if (getCookie("dataTemplate") !== "") {
@@ -147,9 +155,7 @@ export default function Template() {
     setData(newData);
   };
 
-  useEffect(() => {
-    console.log(senderShowForm, showForm);
-  }, [senderShowForm, showForm]);
+  useEffect(() => {}, [senderShowForm, showForm]);
 
   const handleCheckSender = (e: any) => {
     let data: any = document.querySelector("#sender");
@@ -198,8 +204,8 @@ export default function Template() {
         randomize_text: "",
         receive_from: showForm ? "********" : data?.receive_name,
         original_receive_from: data?.receive_name,
-        secure_answer: "gatau",
-        secure_question: "Apa iya?",
+        secure_answer: data?.answer,
+        secure_question: data?.question,
         send_to: senderShowForm ? "********" : data?.sender,
         original_send_to: data?.sender,
         template_id: idData,
@@ -221,8 +227,28 @@ export default function Template() {
   }, [share, dataImage]);
 
   useEffect(() => {
+    console.log(randomizeNumber);
+    if (randomizeNumber !== undefined) {
+      handleSave();
+    }
+  }, [randomizeNumber]);
+
+  useEffect(() => {
+    if (desktop && dataImage !== undefined) {
+      window?.ReactNativeWebView?.postMessage(
+        JSON.stringify({
+          type: "download",
+          url: dataImage,
+        })
+      );
+    }
+  }, [desktop, dataImage]);
+
+  useEffect(() => {
     if (saveTemplate) {
       randomize();
+      // .then((rslt) => handleSave())
+      // .catch((error) => console.log(error));
     }
   }, [saveTemplate]);
 
@@ -245,14 +271,15 @@ export default function Template() {
 
   const handleShare = (e: any) => {
     e.preventDefault();
-    handleSave();
+
     exportAsImage(exportRef?.current, setDataImage);
     setShare(true);
   };
 
   const handleDownload = () => {
     saveImage(exportRef?.current, "Surat");
-    handleSave();
+    exportAsImage(exportRef?.current, setDataImage);
+    setDesktop(true);
   };
 
   const randomize = () => {
@@ -262,6 +289,7 @@ export default function Template() {
   };
 
   const handlePreview = () => {
+    // handleSave();
     setSaveTemplate(!saveTemplate);
   };
 

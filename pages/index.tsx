@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import DashboardLayout from "../src/components/DashboardLayout";
@@ -15,6 +17,7 @@ export default function Input() {
 
   useEffect(() => {
     // console.log(router);
+    window?.ReactNativeWebView?.postMessage();
   }, [router]);
 
   useEffect(() => {
@@ -29,6 +32,7 @@ export default function Input() {
         })
       );
     }
+    console.log(messageList?.map((item) => item.message_id), data?.id_message);
   }, [messageList, data]);
 
   useEffect(() => {

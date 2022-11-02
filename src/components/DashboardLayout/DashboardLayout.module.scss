@@ -18,8 +18,8 @@ $breakpoint-lg: 992px;
     background-color: $red-primary;
 
     .dashboardContent {
-      // height: calc(100vh - 50px);
-      height: 100%;
+      height: calc(100vh - 50px);
+      // height: 100%;
       padding-bottom: 74px;
       padding: 12px 0px 0px;
       max-width: 500px;
