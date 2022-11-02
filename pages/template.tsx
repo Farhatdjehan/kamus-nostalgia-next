@@ -32,6 +32,7 @@ export default function Template() {
   const [json, setJson]: any = useState();
   const [data, setData]: any = useState();
   const [showForm, setShowForm]: any = useState(false);
+  const [clone, setClone]: any = useState(false);
   const [senderShowForm, setSenderShowForm]: any = useState(false);
   const [idMessages, setIdMessages]: any = useState();
   const [templateData, setTemplateData]: any = useState([]);
@@ -66,27 +67,6 @@ export default function Template() {
       width: "350px",
     },
   };
-
-  useEffect(() => {
-    if (
-      saveTemplate &&
-      dataList &&
-      dataList
-        .map((item: any) => item.message_id)
-        .indexOf(parseInt(randomizeNumber)) !== -1
-    ) {
-      randomize();
-    }
-    console.log(
-      saveTemplate &&
-        dataList &&
-        dataList
-          .map((item: any) => item.message_id)
-          .indexOf(parseInt(randomizeNumber)) !== -1
-    );
-  }, [dataList, saveTemplate]);
-
-  useEffect(() => {}, [dataCookie]);
 
   useEffect(() => {
     if (getCookie("dataTemplate") !== "") {
@@ -155,8 +135,6 @@ export default function Template() {
     setData(newData);
   };
 
-  useEffect(() => {}, [senderShowForm, showForm]);
-
   const handleCheckSender = (e: any) => {
     let data: any = document.querySelector("#sender");
     data?.checked;
@@ -206,8 +184,8 @@ export default function Template() {
         original_receive_from: data?.receive_name,
         secure_answer: data?.answer,
         secure_question: data?.question,
-        send_to: senderShowForm ? "********" : data?.sender,
-        original_send_to: data?.sender,
+        send_to: senderShowForm ? "********" : data?.sender_name,
+        original_send_to: data?.sender_name,
         template_id: idData,
       }).then((value: any) => {
         // fetchData(
@@ -227,8 +205,8 @@ export default function Template() {
   }, [share, dataImage]);
 
   useEffect(() => {
-    console.log(randomizeNumber);
-    if (randomizeNumber !== undefined) {
+    if (randomizeNumber !== undefined && clone === false) {
+      setClone(false);
       handleSave();
     }
   }, [randomizeNumber]);
@@ -245,10 +223,21 @@ export default function Template() {
   }, [desktop, dataImage]);
 
   useEffect(() => {
+    if (
+      saveTemplate &&
+      dataList &&
+      dataList
+        .map((item: any) => item.message_id)
+        .indexOf(parseInt(randomizeNumber)) !== -1
+    ) {
+      
+      randomize();
+    }
+  }, [dataList, saveTemplate]);
+
+  useEffect(() => {
     if (saveTemplate) {
       randomize();
-      // .then((rslt) => handleSave())
-      // .catch((error) => console.log(error));
     }
   }, [saveTemplate]);
 
@@ -302,8 +291,8 @@ export default function Template() {
             <input
               onChange={handleChange}
               className={styles.inputSender}
-              id="sender"
-              name="sender"
+              id="sender_name"
+              name="sender_name"
               placeholder="Nama mu siapa?"
             />
             <div className={`${styles.showCheck} ${styles.marginBottom}`}>

@@ -17,7 +17,7 @@ export default function Input() {
 
   useEffect(() => {
     // console.log(router);
-    window?.ReactNativeWebView?.postMessage();
+    // window?.ReactNativeWebView?.postMessage();
   }, [router]);
 
   useEffect(() => {
@@ -32,7 +32,10 @@ export default function Input() {
         })
       );
     }
-    console.log(messageList?.map((item) => item.message_id), data?.id_message);
+    console.log(
+      messageList?.map((item) => item.message_id),
+      data?.id_message
+    );
   }, [messageList, data]);
 
   useEffect(() => {

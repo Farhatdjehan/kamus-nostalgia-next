@@ -85,10 +85,10 @@ export default function Preview() {
                 />
               </div>
               <div className={styles.letterText}>
-                Dari : {previewData && previewData[id]?.receive_from}
+                Dari : {previewData && previewData[id]?.original_receive_from}
               </div>
               <div className={styles.letterForText}>
-                Untuk : {previewData && previewData[id]?.send_to}
+                Untuk : {previewData && previewData[id]?.original_send_to}
               </div>
               <div className={styles.templateText}>
                 {previewData && previewData[id]?.original_text}
