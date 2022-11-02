@@ -4,7 +4,7 @@ import Link from "next/link";
 import DashboardLayout from "../src/components/DashboardLayout";
 import styles from "./../styles/pages/Template.module.scss";
 import { template } from "./../src/helpers/imageTemplate";
-import { exportAsImage, getCookie } from "../src/helpers/common";
+import { exportAsImage, getCookie, saveImage } from "../src/helpers/common";
 import { useRouter } from "next/router";
 import { app, database } from "./../firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
@@ -18,7 +18,9 @@ export default function Template() {
   const router = useRouter();
   const exportRef: any = useRef<HTMLDivElement>();
   const [idData, setIdData]: any = useState();
+  const [randomDataCookie, setRandomDataCookie]: any = useState();
   const [saveTemplate, setSaveTemplate]: any = useState();
+  const [randomizeNumber, setRandomizeNumber]: any = useState();
   const [share, setShare]: any = useState(false);
   const [socialMedia, setSocialMedia]: any = useState();
   const [dataCookie, setDataCookie]: any = useState();
@@ -27,8 +29,10 @@ export default function Template() {
   const [json, setJson]: any = useState();
   const [data, setData]: any = useState();
   const [showForm, setShowForm]: any = useState(false);
+  const [senderShowForm, setSenderShowForm]: any = useState(false);
   const [idMessages, setIdMessages]: any = useState();
   const [templateData, setTemplateData]: any = useState([]);
+  const [dataList, setDataList]: any = useState();
 
   useEffect(() => {
     getNotes();
@@ -38,7 +42,7 @@ export default function Template() {
 
   const getNotes = () => {
     getDocs(dbInstance).then((data) => {
-      console.log(
+      setDataList(
         data.docs.map((item) => {
           return { ...item.data(), id: item.id };
         })
@@ -61,31 +65,20 @@ export default function Template() {
   };
 
   useEffect(() => {
-    let tmp: any = {
-      id: 1,
-      pengirim: {
-        id: 1,
-        nama: "",
-      },
-      penerima: {
-        id: 1,
-        nama: "",
-        isVisible: false,
-      },
-      content: "",
-      template_id: "",
-    };
-
-    tmp.pengirim.nama = data?.sender;
-    tmp.penerima.nama = data?.receive_name;
-    tmp.penerima.isVisible = showForm;
-    tmp.content = dataCookie;
-    tmp.template_id = 1;
-
-    if (saveTemplate) {
-      setJson(tmp);
+    if (
+      saveTemplate &&
+      dataList &&
+      dataList
+        .map((item: any) => item.message_id)
+        .indexOf(parseInt(randomizeNumber)) !== -1
+    ) {
+      randomize();
     }
-  }, [saveTemplate, dataCookie]);
+  }, [dataList, saveTemplate]);
+
+  useEffect(() => {
+    console.log(dataCookie?.original);
+  }, [dataCookie]);
 
   useEffect(() => {
     if (getCookie("dataTemplate") !== "") {
@@ -154,7 +147,18 @@ export default function Template() {
     setData(newData);
   };
 
+  useEffect(() => {
+    console.log(senderShowForm, showForm);
+  }, [senderShowForm, showForm]);
+
+  const handleCheckSender = (e: any) => {
+    let data: any = document.querySelector("#sender");
+    data?.checked;
+    setSenderShowForm(data?.checked);
+  };
+
   const handleCheck = (e: any) => {
+    // e.preventDefault();
     let data: any = document.querySelector("#receive");
     data?.checked;
     setShowForm(data?.checked);
@@ -181,36 +185,46 @@ export default function Template() {
     }
   };
 
-  const handleSave = (e: any, id: number) => {
+  const handleSave = () => {
     // setSocialMedia(id);
-    e.preventDefault();
-    addDoc(dbInstance, {
-      created_at: moment().unix(),
-      fake_text: dataCookie,
-      message_id: 129380,
-      original_text: "Gimana nih?",
-      randomize_text: "Gigimanagaga nigih?",
-      receive_from: data?.receive_name,
-      secure_answer: "gatau",
-      secure_question: "Apa iya?",
-      send_to: data?.sender,
-      template_id: idData,
-    }).then((value: any) => {
-      fetchData(
-        `https://kamus-nostalgia.vercel.app/preview?id=${value._key.path.segments[1]}`,
-        id
-      );
-      // setIdMessages(value._key.path.segments[1]);
-      // router.reload();
-    });
+    if (dataCookie !== undefined) {
+      addDoc(dbInstance, {
+        isReceiptVisible: !showForm,
+        isSenderVisible: !senderShowForm,
+        created_at: moment().unix(),
+        fake_text: dataCookie?.result,
+        message_id: randomizeNumber,
+        original_text: dataCookie?.original,
+        randomize_text: "",
+        receive_from: showForm ? "********" : data?.receive_name,
+        original_receive_from: data?.receive_name,
+        secure_answer: "gatau",
+        secure_question: "Apa iya?",
+        send_to: senderShowForm ? "********" : data?.sender,
+        original_send_to: data?.sender,
+        template_id: idData,
+      }).then((value: any) => {
+        // fetchData(
+        //   `https://kamus-nostalgia.vercel.app/preview?id=${value._key.path.segments[1]}`,
+        //   id
+        // );
+        // setIdMessages(value._key.path.segments[1]);
+        // router.reload();
+      });
+    }
   };
 
   useEffect(() => {
-    console.log(dataImage)
     if (share && dataImage !== undefined) {
       shareNav();
     }
   }, [share, dataImage]);
+
+  useEffect(() => {
+    if (saveTemplate) {
+      randomize();
+    }
+  }, [saveTemplate]);
 
   const shareNav = async () => {
     const blob = await (await fetch(dataImage)).blob();
@@ -231,37 +245,88 @@ export default function Template() {
 
   const handleShare = (e: any) => {
     e.preventDefault();
+    handleSave();
     exportAsImage(exportRef?.current, setDataImage);
     setShare(true);
   };
+
+  const handleDownload = () => {
+    saveImage(exportRef?.current, "Surat");
+    handleSave();
+  };
+
+  const randomize = () => {
+    let tmpNumb;
+    tmpNumb = Math.floor(Math.random() * 1000000);
+    setRandomizeNumber(tmpNumb);
+  };
+
+  const handlePreview = () => {
+    setSaveTemplate(!saveTemplate);
+  };
+
   return (
     <DashboardLayout pageTitle="Pilih Template">
       <div className={styles.wrapperTemplate}>
         <div>
-          <div className={styles.label}>Pengirim Surat</div>
-          <input
-            onChange={handleChange}
-            className={styles.inputSender}
-            id="sender"
-            name="sender"
-            placeholder="Masukkin nama kamu disini"
-          />
-          <div className={styles.label}>Penerima Surat</div>
-          <input
-            onChange={handleChange}
-            className={styles.inputSender}
-            id="receive_name"
-            name="receive_name"
-            placeholder="Masukkin nama penerima disini"
-          />
-          <div className={styles.showCheck}>
+          <div>
+            <div className={styles.label}>Pengirim Surat</div>
             <input
-              onChange={handleCheck}
-              type="checkbox"
-              id="receive"
-              name="receive"
+              onChange={handleChange}
+              className={styles.inputSender}
+              id="sender"
+              name="sender"
+              placeholder="Nama mu siapa?"
             />
-            <label htmlFor="receive">Sembunyikan Pengirim?</label>
+            <div className={`${styles.showCheck} ${styles.marginBottom}`}>
+              <input
+                onChange={handleCheckSender}
+                type="checkbox"
+                id="sender"
+                name="sender"
+              />
+              <label htmlFor="sender">Sembunyikan Pengirim?</label>
+            </div>
+            <div className={styles.label}>Penerima Surat</div>
+            <input
+              onChange={handleChange}
+              className={styles.inputSender}
+              id="receive_name"
+              name="receive_name"
+              placeholder="Penerima suratnya siapa?"
+            />
+            <div className={`${styles.showCheck} ${styles.marginBottom}`}>
+              <input
+                onChange={handleCheck}
+                type="checkbox"
+                id="receive"
+                name="receive"
+              />
+              <label htmlFor="receive">Sembunyikan Penerima?</label>
+            </div>
+          </div>
+          <div className={styles.label}>Pertanyaan Untuk Penerima Surat</div>
+          <input
+            onChange={handleChange}
+            className={`${styles.inputSender} ${styles.marginBottom}`}
+            id="question"
+            name="question"
+            placeholder="Masukkin pertanyaan untuk dia"
+          />
+          <div className={styles.label}>Jawaban Pertanyaan</div>
+          <input
+            onChange={handleChange}
+            className={`${styles.inputSender} ${styles.marginBottom}`}
+            id="answer"
+            name="answer"
+            placeholder="Masukkin jawabannya juga ya"
+          />
+          <div className={styles.wrap}>
+            <div className={styles.label}>Mau Acak Suratnya?</div>
+            <label className={`${styles.label} ${styles.random_label}`}>
+              <input type="checkbox" />
+              <span className={styles.slider}></span>
+            </label>
           </div>
         </div>
 
@@ -309,18 +374,27 @@ export default function Template() {
                     layout="responsive"
                   />
                 </div>
-                {/* <div className={styles.letterId}>ID : 1</div> */}
+                <div className={styles.letterId}>ID : {randomizeNumber}</div>
                 <div className={styles.letterText}>
-                  Dari : {showForm ? "******" : data?.sender}
+                  Dari : {senderShowForm ? "******" : data?.sender}
                 </div>
                 <div className={styles.letterForText}>
-                  Untuk : {data?.receive_name}
+                  Untuk : {showForm ? "******" : data?.receive_name}
                 </div>
-                <div className={styles.templateText}>{dataCookie}</div>
+                <div className={styles.templateText}>{dataCookie.result}</div>
+                <div className={styles.templateUrl}>
+                  Mau tau artinya? download Kamus Nostalgia di playstore dan
+                  masukkin ID : {randomizeNumber}
+                </div>
               </div>
               <div className={styles.wrapperMain}>
-                <div className={styles.label}>Share Melalui</div>
                 <div className={styles.wrapperButton}>
+                  <button
+                    onClick={handleDownload}
+                    className={styles.buttonSave}
+                  >
+                    Download!
+                  </button>
                   <button onClick={handleShare} className={styles.buttonSave}>
                     Share!
                   </button>
@@ -366,7 +440,7 @@ export default function Template() {
         <div className={styles.wrapperSee}>
           <button
             disabled={templateData[idData] !== undefined ? false : true}
-            onClick={() => setSaveTemplate(!saveTemplate)}
+            onClick={handlePreview}
           >
             Lihat Surat
           </button>

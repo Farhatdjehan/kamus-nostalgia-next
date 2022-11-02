@@ -12,13 +12,18 @@ export default function Preview() {
   const [tempalteData, setTemplateData]: any = useState([]);
   const [previewData, setPreviewData]: any = useState();
   const [id, setId]: any = useState();
-  const dataId = router?.query?.id;
+  const dataId: any = router?.query?.id;
 
-  const dbInstance = collection(database, "messages");
+  const dbInstance = collection(database, "messages_list");
   useEffect(() => {
     if (dataId && previewData) {
-      setId(previewData.map((item: any) => item.id).indexOf(dataId));
+      setId(
+        previewData
+          .map((item: any) => item.message_id)
+          .indexOf(parseInt(dataId))
+      );
     }
+    // console.log(dataId, previewData);
   }, [previewData, dataId]);
 
   useEffect(() => {
@@ -80,13 +85,13 @@ export default function Preview() {
                 />
               </div>
               <div className={styles.letterText}>
-                Dari : {previewData && previewData[id]?.sender}
+                Dari : {previewData && previewData[id]?.receive_from}
               </div>
               <div className={styles.letterForText}>
-                Untuk : {previewData && previewData[id]?.receiver}
+                Untuk : {previewData && previewData[id]?.send_to}
               </div>
               <div className={styles.templateText}>
-                {previewData && previewData[id]?.desc}
+                {previewData && previewData[id]?.original_text}
               </div>
             </div>
           )}
