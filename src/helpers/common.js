@@ -126,7 +126,8 @@ export const exportAsImage = async (element, setData) => {
         const canvas = await html2canvas(element);
         if (canvas !== undefined) {
             const image = canvas.toDataURL("image/png", 1.0);
-            console.log(image);
+            setData(image);
+            // console.log(image);
             // return image;
         }
         // if (canvas) {

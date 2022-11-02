@@ -218,7 +218,7 @@ export default function Template() {
     //   url: "https://developer.mozilla.org",
     // };
     const blob = await (await fetch(dataImage)).blob();
-    const file = new File([blob], "fileName.png", { type: blob.type });
+    const file = new File([blob], "surat_kamu.png", { type: blob.type });
     // if (navigator.canShare({ dataImage })) {
     try {
       await navigator.share({
