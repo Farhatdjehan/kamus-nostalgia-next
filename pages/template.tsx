@@ -10,13 +10,19 @@ import { app, database } from "./../firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import axios from "axios";
 import Modal from "react-modal";
-
+import whatsapp from "./../public/whatsapp.png";
+import facebook from "./../public/facebook.png";
+import twitter from "./../public/twitter.png";
+import moment from "moment";
 export default function Template() {
   const router = useRouter();
   const exportRef: any = useRef<HTMLDivElement>();
   const [idData, setIdData]: any = useState();
   const [saveTemplate, setSaveTemplate]: any = useState();
+  const [share, setShare]: any = useState(false);
+  const [socialMedia, setSocialMedia]: any = useState();
   const [dataCookie, setDataCookie]: any = useState();
+  const [dataImage, setDataImage]: any = useState();
   const [link, setLink]: any = useState();
   const [json, setJson]: any = useState();
   const [data, setData]: any = useState();
@@ -28,7 +34,7 @@ export default function Template() {
     getNotes();
   }, []);
 
-  const dbInstance = collection(database, "messages");
+  const dbInstance = collection(database, "messages_list");
 
   const getNotes = () => {
     getDocs(dbInstance).then((data) => {
@@ -96,10 +102,6 @@ export default function Template() {
     }
   }, [link]);
 
-  useLayoutEffect(() => {
-    console.log(exportRef?.current); // { current: <h1_object> }
-  });
-
   useEffect(() => {
     let arr = [];
     for (let i = 0; i < template?.length; i++) {
@@ -107,6 +109,12 @@ export default function Template() {
       setTemplateData(arr);
     }
   }, []);
+
+  useEffect(() => {
+    if (data?.sender === undefined && data?.receiver === undefined) {
+      setSaveTemplate(false);
+    }
+  }, [data]);
 
   const handleSelected = (e: any, index: any) => {
     e.preventDefault();
@@ -152,39 +160,110 @@ export default function Template() {
     setShowForm(data?.checked);
   };
 
-  const fetchData = async (value: string) => {
+  const fetchData = async (value: string, id: number) => {
     try {
       const response = await axios(
         `https://api.shrtco.de/v2/shorten?url=${value}`
       );
       if (response !== undefined) {
-        setLink(
-          `https://web.whatsapp.com/send?text=Hai,%20Aku%20ada%20sesuatu%20untuk%20kamu!.%20Cek%20link%20ini%20:%20${response.data.result.full_short_link}`
-        );
+        let data;
+        if (id === 1) {
+          data = `https://wa.me/?text=Hai,%20Aku%20ada%20sesuatu%20untuk%20kamu!.%20Cek%20link%20ini%20:%20${response.data.result.full_short_link}`;
+        } else if (id === 2) {
+          data = `http://twitter.com/share?text=Hai,%20Aku%20ada%20sesuatu%20untuk%20kamu!.%20Cek%20link%20ini%20:%20${response.data.result.full_short_link}`;
+        } else {
+          data = `https://www.facebook.com/sharer/sharer.php?u=${response.data.result.full_short_link}&amp;src=sdkpreparse`;
+        }
+        setLink(data);
       }
     } catch (e) {
-      console.log(e);
+      console.log(e, "<==");
     }
   };
 
-  const handleSave = () => {
+  const handleSave = (e: any, id: number) => {
+    // setSocialMedia(id);
+    e.preventDefault();
     addDoc(dbInstance, {
-      sender: data?.sender,
-      receiver: data?.receive_name,
+      created_at: moment().unix(),
+      fake_text: dataCookie,
+      message_id: 129380,
+      original_text: "Gimana nih?",
+      randomize_text: "Gigimanagaga nigih?",
+      receive_from: data?.receive_name,
+      secure_answer: "gatau",
+      secure_question: "Apa iya?",
+      send_to: data?.sender,
       template_id: idData,
-      desc: dataCookie,
     }).then((value: any) => {
       fetchData(
-        `https://kamus-nostalgia.vercel.app/preview?id=${value._key.path.segments[1]}`
+        `https://kamus-nostalgia.vercel.app/preview?id=${value._key.path.segments[1]}`,
+        id
       );
-
       // setIdMessages(value._key.path.segments[1]);
       // router.reload();
     });
   };
+
+  useEffect(() => {
+    if (share) {
+      shareNav();
+    }
+  }, [share, dataImage]);
+
+  const shareNav = async () => {
+    // const shareData = {
+    //   title: "MDN",
+    //   text: "Learn web development on MDN!",
+    //   url: "https://developer.mozilla.org",
+    // };
+    const blob = await (await fetch(dataImage)).blob();
+    const file = new File([blob], "fileName.png", { type: blob.type });
+    // if (navigator.canShare({ dataImage })) {
+    try {
+      await navigator.share({
+        title: "Hello",
+        text: "Check out this image!",
+        files: [file],
+      });
+    } catch (error) {
+      // output.textContent = `Error: ${error.message}`;
+    }
+    // } else {
+    //   output.textContent = `Your system doesn't support sharing these files.`
+    // }
+    // try {
+    //   const nav = await navigator.share(shareData);
+    //   if (nav !== undefined) {
+    //     console.log("success");
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    //   // resultPara.textContent = `Error: ${err}`;
+    // }
+  };
+
+  const handleShare = (e: any) => {
+    e.preventDefault();
+    exportAsImage(exportRef?.current, setDataImage);
+    setShare(true);
+    // if (navigator.canShare({ files })) {
+    // try {
+    //   await navigator.share({
+    //     files,
+    //     title: "Images",
+    //     text: "Beautiful images",
+    //   });
+    //   output.textContent = "Shared!";
+    // } catch (error) {
+    //   output.textContent = `Error: ${error.message}`;
+    // }
+    // } else {
+    //   output.textContent = `Your system doesn't support sharing these files.`;
+    // }
+  };
   return (
     <DashboardLayout pageTitle="Pilih Template">
-      <input id="browse" type="file" multiple />
       <div className={styles.wrapperTemplate}>
         <div>
           <div className={styles.label}>Pengirim Surat</div>
@@ -210,7 +289,7 @@ export default function Template() {
               id="receive"
               name="receive"
             />
-            <label htmlFor="receive">Sembunyikan Penerima?</label>
+            <label htmlFor="receive">Sembunyikan Pengirim?</label>
           </div>
         </div>
 
@@ -259,35 +338,55 @@ export default function Template() {
                   />
                 </div>
                 {/* <div className={styles.letterId}>ID : 1</div> */}
-                <div className={styles.letterText}>Dari : {data?.sender}</div>
+                <div className={styles.letterText}>
+                  Dari : {showForm ? "******" : data?.sender}
+                </div>
                 <div className={styles.letterForText}>
-                  Untuk : {showForm ? "******" : data?.receive_name}
+                  Untuk : {data?.receive_name}
                 </div>
                 <div className={styles.templateText}>{dataCookie}</div>
               </div>
-              {/* <button
-                className={styles.buttonSave}
-                disabled={templateData[idData] !== undefined ? false : true}
-                onClick={() =>
-                  exportAsImage(
-                    exportRef?.current,
-                    json,
-                    `Surat Untuk Kamu - ${data?.sender}`
-                  )
-                }
-              > */}
-              <div
-                className={styles.buttonSave}
-                // `}
-                onClick={handleSave}
-                // exportAsImage(
-                //   exportRef?.current,
-                //   `Surat Untuk Kamu - ${data?.sender}`
-                // )
-              >
-                Share Ke Whatsapp
+              <div className={styles.wrapperMain}>
+                <div className={styles.label}>Share Melalui</div>
+                <div className={styles.wrapperButton}>
+                  <button onClick={handleShare} className={styles.buttonSave}>
+                    Share!
+                  </button>
+                  {/* <div
+                    className={styles.buttonSave}
+                    onClick={(e) => handleSave(e, 1)}
+                  >
+                    <Image
+                      width={15}
+                      height={15}
+                      src={whatsapp.src}
+                      alt="copy"
+                    />
+                  </div> */}
+                  {/* <div
+                    className={styles.buttonSave}
+                    onClick={(e) => handleSave(e, 2)}
+                  >
+                    <Image
+                      width={15}
+                      height={15}
+                      src={twitter.src}
+                      alt="copy"
+                    />
+                  </div>
+                  <div
+                    className={styles.buttonSave}
+                    onClick={(e) => handleSave(e, 3)}
+                  >
+                    <Image
+                      width={15}
+                      height={15}
+                      src={facebook.src}
+                      alt="copy"
+                    />
+                  </div> */}
+                </div>
               </div>
-              {/* </button> */}
             </>
           )}
         </Modal>

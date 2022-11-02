@@ -155,17 +155,30 @@
     text-align: center;
   }
 }
-.buttonSave {
-  margin-top: 16px;
-  padding: 12px;
-  align-self: flex-start;
-  justify-content: center;
-  border: none !important;
-  border-radius: 8px;
-  color: white;
-  font-weight: 600;
-  background-color: #be2239;
-  width: 100%;
+.wrapperMain {
   display: flex;
-  align-items: center;
+  justify-content: space-between;
+  .label {
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .wrapperButton {
+    display: flex;
+    .buttonSave {
+      margin-top: 16px;
+      padding: 12px;
+      align-self: flex-start;
+      justify-content: center;
+      border: none !important;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      background-color: #be2239;
+      // width: 100%;
+      display: flex;
+      align-items: center;
+      margin-right: 8px;
+    }
+  }
 }
