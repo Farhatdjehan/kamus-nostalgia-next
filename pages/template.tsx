@@ -182,7 +182,7 @@ export default function Template() {
         randomize_text: "",
         receive_from: showForm ? "********" : data?.receive_name,
         original_receive_from: data?.receive_name,
-        secure_answer: data?.answer,
+        secure_answer: data?.answer.toLowerCase(),
         secure_question: data?.question,
         send_to: senderShowForm ? "********" : data?.sender_name,
         original_send_to: data?.sender_name,
@@ -230,7 +230,6 @@ export default function Template() {
         .map((item: any) => item.message_id)
         .indexOf(parseInt(randomizeNumber)) !== -1
     ) {
-      
       randomize();
     }
   }, [dataList, saveTemplate]);

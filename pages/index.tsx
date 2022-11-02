@@ -40,7 +40,7 @@ export default function Input() {
 
   useEffect(() => {
     if (answerQuestion) {
-      if (found[0].secure_answer === data?.answer) {
+      if (found[0].secure_answer == data?.answer.toLowerCase()) {
         setAnswerQuestion(false);
         router.push(`/preview?id=${data?.id_message}`);
       } else {
