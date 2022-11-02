@@ -206,17 +206,13 @@ export default function Template() {
   };
 
   useEffect(() => {
-    if (share) {
+    console.log(dataImage)
+    if (share && dataImage !== undefined) {
       shareNav();
     }
   }, [share, dataImage]);
 
   const shareNav = async () => {
-    // const shareData = {
-    //   title: "MDN",
-    //   text: "Learn web development on MDN!",
-    //   url: "https://developer.mozilla.org",
-    // };
     const blob = await (await fetch(dataImage)).blob();
     const file = new File([blob], "surat_kamu.png", { type: blob.type });
     // if (navigator.canShare({ dataImage })) {
@@ -226,41 +222,17 @@ export default function Template() {
         text: "Check out this image!",
         files: [file],
       });
+      setShare(false);
     } catch (error) {
+      setShare(false);
       // output.textContent = `Error: ${error.message}`;
     }
-    // } else {
-    //   output.textContent = `Your system doesn't support sharing these files.`
-    // }
-    // try {
-    //   const nav = await navigator.share(shareData);
-    //   if (nav !== undefined) {
-    //     console.log("success");
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    //   // resultPara.textContent = `Error: ${err}`;
-    // }
   };
 
   const handleShare = (e: any) => {
     e.preventDefault();
     exportAsImage(exportRef?.current, setDataImage);
     setShare(true);
-    // if (navigator.canShare({ files })) {
-    // try {
-    //   await navigator.share({
-    //     files,
-    //     title: "Images",
-    //     text: "Beautiful images",
-    //   });
-    //   output.textContent = "Shared!";
-    // } catch (error) {
-    //   output.textContent = `Error: ${error.message}`;
-    // }
-    // } else {
-    //   output.textContent = `Your system doesn't support sharing these files.`;
-    // }
   };
   return (
     <DashboardLayout pageTitle="Pilih Template">
