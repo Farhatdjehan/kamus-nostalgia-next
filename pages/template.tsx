@@ -212,7 +212,7 @@ export default function Template() {
   }, [randomizeNumber]);
 
   useEffect(() => {
-    if (desktop && dataImage !== undefined) {
+    if ((desktop || share) && dataImage !== undefined) {
       window?.ReactNativeWebView?.postMessage(
         JSON.stringify({
           type: "download",
@@ -220,7 +220,7 @@ export default function Template() {
         })
       );
     }
-  }, [desktop, dataImage]);
+  }, [desktop, dataImage, share]);
 
   useEffect(() => {
     if (
@@ -247,7 +247,7 @@ export default function Template() {
     try {
       await navigator.share({
         title: "Hello",
-        text: "Check out this image!",
+        text: "Aku punya sesuatu untuk mu!",
         files: [file],
       });
       setShare(false);
@@ -259,7 +259,6 @@ export default function Template() {
 
   const handleShare = (e: any) => {
     e.preventDefault();
-
     exportAsImage(exportRef?.current, setDataImage);
     setShare(true);
   };
