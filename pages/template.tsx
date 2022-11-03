@@ -219,6 +219,8 @@ export default function Template() {
           url: dataImage,
         })
       );
+    } else {
+      window?.ReactNativeWebView?.postMessage();
     }
   }, [desktop, dataImage, share]);
 
