@@ -220,7 +220,7 @@ export default function Template() {
         })
       );
     } else {
-      window?.ReactNativeWebView?.postMessage();
+      window?.ReactNativeWebView?.postMessage("tes");
     }
   }, [desktop, dataImage, share]);
 
