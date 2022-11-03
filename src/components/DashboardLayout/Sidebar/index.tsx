@@ -110,6 +110,12 @@ export default function Sidebar(props: SidebarProps) {
                 <a></a>
               </Link>
             </MenuItem>
+            <MenuItem>
+              Masukkan ID Surat
+              <Link href="/">
+                <a></a>
+              </Link>
+            </MenuItem>
           </Menu>
         </SidebarContent>
       </ProSidebar>

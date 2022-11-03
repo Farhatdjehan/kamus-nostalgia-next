@@ -318,7 +318,7 @@ export default function Template() {
       <div className={styles.wrapperTemplate}>
         <div>
           <div>
-            <div className={styles.label}>Pengirim Surat</div>
+            <div className={styles.label}>Pengirim</div>
             <input
               onChange={handleChange}
               className={styles.inputSender}
@@ -333,9 +333,9 @@ export default function Template() {
                 id="sender"
                 name="sender"
               />
-              <label htmlFor="sender">Sembunyikan Pengirim?</label>
+              <label htmlFor="sender">Sembunyikan Pengirim</label>
             </div>
-            <div className={styles.label}>Penerima Surat</div>
+            <div className={styles.label}>Penerima</div>
             <input
               onChange={handleChange}
               className={styles.inputSender}
@@ -350,10 +350,10 @@ export default function Template() {
                 id="receive"
                 name="receive"
               />
-              <label htmlFor="receive">Sembunyikan Penerima?</label>
+              <label htmlFor="receive">Sembunyikan Penerima</label>
             </div>
           </div>
-          <div className={styles.label}>Pertanyaan Untuk Penerima Surat</div>
+          <div className={styles.label}>Pertanyaan Untuk Penerima</div>
           <input
             onChange={handleChange}
             className={`${styles.inputSender} ${styles.marginBottom}`}
@@ -361,7 +361,7 @@ export default function Template() {
             name="question"
             placeholder="Masukkin pertanyaan untuk dia"
           />
-          <div className={styles.label}>Jawaban Pertanyaan</div>
+          <div className={styles.label}>Jawaban</div>
           <input
             onChange={handleChange}
             className={`${styles.inputSender} ${styles.marginBottom}`}
@@ -369,7 +369,7 @@ export default function Template() {
             name="answer"
             placeholder="Masukkin jawabannya juga ya"
           />
-          <div className={styles.wrap}>
+          {/* <div className={styles.wrap}>
             <div className={styles.label}>Mau Acak Suratnya?</div>
             <label className={`${styles.label} ${styles.random_label}`}>
               <input
@@ -380,7 +380,7 @@ export default function Template() {
               />
               <span className={styles.slider}></span>
             </label>
-          </div>
+          </div> */}
         </div>
 
         <div className={styles.mainTitle}>Pilih Template</div>
@@ -438,8 +438,8 @@ export default function Template() {
                   {randomWord ? randomResult.join(" ") : dataCookie.result}
                 </div>
                 <div className={styles.templateUrl}>
-                  Mau tau artinya? download Kamus Nostalgia di playstore atau
-                  kunjungi shorturl.at/afgU5 dan masukkan ID : {randomizeNumber}
+                  Mau tau artinya? download Kamus Nostalgia di playstore dan
+                  masukkan ID : {randomizeNumber}
                 </div>
               </div>
               <div className={styles.wrapperMain}>

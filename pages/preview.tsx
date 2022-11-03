@@ -12,26 +12,31 @@ export default function Preview() {
   const [tempalteData, setTemplateData]: any = useState([]);
   const [previewData, setPreviewData]: any = useState();
   const [id, setId]: any = useState();
-  const dataId: any = router?.query?.id;
+  const [realId, setRealId]: any = useState();
+  let dataId: any = router?.query?.id;
 
   const dbInstance = collection(database, "messages_list");
+
   useEffect(() => {
-    if (dataId && previewData) {
+    let tmp = dataId?.replace("-", "");
+    setRealId(tmp);
+  }, [router]);
+  useEffect(() => {
+    if (realId && previewData) {
       setId(
         previewData
           .map((item: any) => item.message_id)
-          .indexOf(parseInt(dataId))
+          .indexOf(parseInt(realId))
       );
     }
     // console.log(dataId, previewData);
-  }, [previewData, dataId]);
+  }, [previewData, realId]);
 
   useEffect(() => {
     getNotes();
   }, []);
   useEffect(() => {
     if (previewData !== undefined && id !== undefined) {
-      console.log(previewData, id);
     }
   }, [previewData, id]);
 

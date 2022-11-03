@@ -6,6 +6,7 @@ import DashboardLayout from "../src/components/DashboardLayout";
 import styles from "./../styles/pages/Input.module.scss";
 import { app, database } from "./../firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
+import "animate.css";
 export default function Input() {
   const router = useRouter();
   const [data, setData]: any = useState();
@@ -26,23 +27,27 @@ export default function Input() {
 
   useEffect(() => {
     if (data !== undefined && messageList?.length > 0) {
-      setFound(
-        messageList.filter((id: any) => {
-          return id?.message_id == data.id_message;
-        })
-      );
+      if (
+        data?.id_message_1 !== undefined &&
+        data?.id_message_2 !== undefined
+      ) {
+        let join = data.id_message_1 + data.id_message_2;
+        setFound(
+          messageList.filter((id: any) => {
+            return id?.message_id == join;
+          })
+        );
+      }
     }
-    console.log(
-      messageList?.map((item) => item.message_id),
-      data?.id_message
-    );
   }, [messageList, data]);
 
   useEffect(() => {
     if (answerQuestion) {
       if (found[0].secure_answer == data?.answer.toLowerCase()) {
         setAnswerQuestion(false);
-        router.push(`/preview?id=${data?.id_message}`);
+        router.push(
+          `/preview?id=${data?.id_message_1 + "-" + data?.id_message_2}`
+        );
       } else {
         setAnswerQuestion(false);
         alert("Salah Jawabannya!");
@@ -54,13 +59,12 @@ export default function Input() {
     if (foundSearch) {
       if (found?.length > 0) {
         setFoundSearch(false);
-        router.push(`?id=${data?.id_message}`);
+        router.push(`?id=${data?.id_message_1 + "-" + data?.id_message_2}`);
       } else {
         setFoundSearch(false);
         alert("Salah!");
       }
     }
-    console.log(found);
   }, [foundSearch, found]);
 
   const getNotes = () => {
@@ -99,7 +103,7 @@ export default function Input() {
             <div className={styles.titleQuestion}>
               {found[0]?.secure_question}
             </div>
-            <div className={styles.input}>
+            <div className={styles.inputFull}>
               <input onChange={handleChange} name="answer" id="answer" />
             </div>
           </div>
@@ -113,19 +117,39 @@ export default function Input() {
         </div>
       ) : (
         <div className={styles.wrapperInput}>
-          <div>
-            <div className={styles.title}>Masukkan ID</div>
-            <div className={styles.input}>
-              <input
-                onChange={handleChange}
-                name="id_message"
-                id="id_message"
-              />
+          {/* <div
+            className={`${styles.title} animate__animated animate__bounceInDown animate__fast`}
+          >
+            Kamu Dapat Surat!
+          </div> */}
+          <div className="animate__animated animate__bounceInDown animate__fast">
+            <div className={`${styles.title}`}>Masukkan ID Surat</div>
+            <div className={styles.wrapperID}>
+              <div className={styles.input}>
+                <input
+                  onChange={handleChange}
+                  name="id_message_1"
+                  id="id_message_1"
+                />
+              </div>
+              <div
+                className={styles.dash}
+                style={{ fontWeight: 700, color: "white" }}
+              >
+                -
+              </div>
+              <div className={styles.input}>
+                <input
+                  onChange={handleChange}
+                  name="id_message_2"
+                  id="id_message_2"
+                />
+              </div>
             </div>
           </div>
           <div className={styles.wrapBtn}>
             <button className={styles.skip} onClick={handleSkip}>
-              Lewati
+              Saya Ingin Menulis Surat
             </button>
             <button onClick={handleSubmit}>Simpan</button>
           </div>
