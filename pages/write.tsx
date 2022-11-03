@@ -14,6 +14,7 @@ import swapWhite from "./../public/swap_white.png";
 import DashboardLayout from "../src/components/DashboardLayout";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { isMobile } from "react-device-detect";
 
 const MainScreen = () => {
   const convertWordList = ["G", "S", "P", "U"];
@@ -337,21 +338,6 @@ const MainScreen = () => {
           </div>
           <div className="main-screen__copy">
             <div className="main-button__wrapper">
-              {router?.asPath.split("?")[1] !== "mobile" && (
-                <div id="button-sound">
-                  <button
-                    className={`main-screen__button ${
-                      animationSound &&
-                      "animate__animated animate__pulse animate__faster"
-                    }`}
-                    onClick={() => speechHandler(reverseShow ? reverse : text)}
-                  >
-                    <span style={{ display: "flex" }}>
-                      <img width={15} height={15} src={sound.src} />
-                    </span>
-                  </button>
-                </div>
-              )}
               <CopyToClipboard
                 text={reverseShow ? reverse : text}
                 onCopy={handleCopy}
@@ -368,6 +354,21 @@ const MainScreen = () => {
                   {/* Salin */}
                 </button>
               </CopyToClipboard>
+              {!isMobile && (
+                <div id="button-sound">
+                  <button
+                    className={`main-screen__button ${
+                      animationSound &&
+                      "animate__animated animate__pulse animate__faster"
+                    }`}
+                    onClick={() => speechHandler(reverseShow ? reverse : text)}
+                  >
+                    <span style={{ display: "flex" }}>
+                      <img width={15} height={15} src={sound.src} />
+                    </span>
+                  </button>
+                </div>
+              )}
             </div>
             <div>
               {/* <Link href={`/template`} passHref> */}

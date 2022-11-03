@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { isMobile } from "react-device-detect";
 import Image from "next/image";
 import Link from "next/link";
 import DashboardLayout from "../src/components/DashboardLayout";
@@ -148,26 +149,26 @@ export default function Template() {
     setShowForm(data?.checked);
   };
 
-  const fetchData = async (value: string, id: number) => {
-    try {
-      const response = await axios(
-        `https://api.shrtco.de/v2/shorten?url=${value}`
-      );
-      if (response !== undefined) {
-        let data;
-        if (id === 1) {
-          data = `https://wa.me/?text=Hai,%20Aku%20ada%20sesuatu%20untuk%20kamu!.%20Cek%20link%20ini%20:%20${response.data.result.full_short_link}`;
-        } else if (id === 2) {
-          data = `http://twitter.com/share?text=Hai,%20Aku%20ada%20sesuatu%20untuk%20kamu!.%20Cek%20link%20ini%20:%20${response.data.result.full_short_link}`;
-        } else {
-          data = `https://www.facebook.com/sharer/sharer.php?u=${response.data.result.full_short_link}&amp;src=sdkpreparse`;
-        }
-        setLink(data);
-      }
-    } catch (e) {
-      console.log(e, "<==");
-    }
-  };
+  // const fetchData = async (value: string, id: number) => {
+  //   try {
+  //     const response = await axios(
+  //       `https://api.shrtco.de/v2/shorten?url=${value}`
+  //     );
+  //     if (response !== undefined) {
+  //       let data;
+  //       if (id === 1) {
+  //         data = `https://wa.me/?text=Hai,%20Aku%20ada%20sesuatu%20untuk%20kamu!.%20Cek%20link%20ini%20:%20${response.data.result.full_short_link}`;
+  //       } else if (id === 2) {
+  //         data = `http://twitter.com/share?text=Hai,%20Aku%20ada%20sesuatu%20untuk%20kamu!.%20Cek%20link%20ini%20:%20${response.data.result.full_short_link}`;
+  //       } else {
+  //         data = `https://www.facebook.com/sharer/sharer.php?u=${response.data.result.full_short_link}&amp;src=sdkpreparse`;
+  //       }
+  //       setLink(data);
+  //     }
+  //   } catch (e) {
+  //     console.log(e, "<==");
+  //   }
+  // };
 
   const handleSave = () => {
     // setSocialMedia(id);
@@ -207,7 +208,7 @@ export default function Template() {
   useEffect(() => {
     if (randomizeNumber !== undefined && clone === false) {
       setClone(false);
-      handleSave();
+      // handleSave();
     }
   }, [randomizeNumber]);
 
@@ -222,6 +223,7 @@ export default function Template() {
     } else {
       window?.ReactNativeWebView?.postMessage("tes");
     }
+    console.log((desktop || share) && dataImage !== undefined);
   }, [desktop, dataImage, share]);
 
   useEffect(() => {
@@ -252,9 +254,9 @@ export default function Template() {
         text: "Aku punya sesuatu untuk mu!",
         files: [file],
       });
-      setShare(false);
+      // setShare(false);
     } catch (error) {
-      setShare(false);
+      // setShare(false);
       // output.textContent = `Error: ${error.message}`;
     }
   };
@@ -393,7 +395,7 @@ export default function Template() {
                 </div>
                 <div className={styles.letterId}>ID : {randomizeNumber}</div>
                 <div className={styles.letterText}>
-                  Dari : {senderShowForm ? "******" : data?.sender}
+                  Dari : {senderShowForm ? "******" : data?.sender_name}
                 </div>
                 <div className={styles.letterForText}>
                   Untuk : {showForm ? "******" : data?.receive_name}
@@ -412,9 +414,11 @@ export default function Template() {
                   >
                     Download!
                   </button>
-                  <button onClick={handleShare} className={styles.buttonSave}>
-                    Share!
-                  </button>
+                  {!isMobile && (
+                    <button onClick={handleShare} className={styles.buttonSave}>
+                      Share!
+                    </button>
+                  )}
                   {/* <div
                     className={styles.buttonSave}
                     onClick={(e) => handleSave(e, 1)}
