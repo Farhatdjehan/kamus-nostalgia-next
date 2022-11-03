@@ -35,6 +35,8 @@ export default function Template() {
   const [showForm, setShowForm]: any = useState(false);
   const [clone, setClone]: any = useState(false);
   const [senderShowForm, setSenderShowForm]: any = useState(false);
+  const [randomWord, setRandomWord]: any = useState(false);
+  const [randomResult, setRandomResult]: any = useState([]);
   const [idMessages, setIdMessages]: any = useState();
   const [templateData, setTemplateData]: any = useState([]);
   const [dataList, setDataList]: any = useState();
@@ -172,7 +174,12 @@ export default function Template() {
 
   const handleSave = () => {
     // setSocialMedia(id);
-    if (dataCookie !== undefined) {
+    console.log(randomizeNumber, data);
+    if (
+      dataCookie !== undefined &&
+      randomizeNumber !== undefined &&
+      data !== undefined
+    ) {
       addDoc(dbInstance, {
         isReceiptVisible: !showForm,
         isSenderVisible: !senderShowForm,
@@ -180,7 +187,7 @@ export default function Template() {
         fake_text: dataCookie?.result,
         message_id: randomizeNumber,
         original_text: dataCookie?.original,
-        randomize_text: "",
+        randomize_text: randomWord ? randomResult : "",
         receive_from: showForm ? "********" : data?.receive_name,
         original_receive_from: data?.receive_name,
         secure_answer: data?.answer.toLowerCase(),
@@ -206,9 +213,9 @@ export default function Template() {
   }, [share, dataImage]);
 
   useEffect(() => {
-    if (randomizeNumber !== undefined && clone === false) {
-      setClone(false);
-      // handleSave();
+    if (randomizeNumber !== undefined) {
+      // setClone(false);
+      handleSave();
     }
   }, [randomizeNumber]);
 
@@ -223,7 +230,6 @@ export default function Template() {
     } else {
       window?.ReactNativeWebView?.postMessage("tes");
     }
-    console.log((desktop || share) && dataImage !== undefined);
   }, [desktop, dataImage, share]);
 
   useEffect(() => {
@@ -254,11 +260,34 @@ export default function Template() {
         text: "Aku punya sesuatu untuk mu!",
         files: [file],
       });
-      // setShare(false);
+      setShare(false);
     } catch (error) {
-      // setShare(false);
+      setShare(false);
       // output.textContent = `Error: ${error.message}`;
     }
+  };
+
+  useEffect(() => {
+    if (randomWord) {
+      const newData = randomResult;
+      let tmp = dataCookie?.result.split(" ");
+      let length = tmp.length;
+      for (let i = 0; i < length; i++) {
+        let randomNumber = Math.floor(Math.random() * length);
+        newData.push(tmp[randomNumber]);
+      }
+      setRandomResult(newData);
+    }
+  }, [randomWord, dataCookie]);
+
+  useEffect(() => {
+    console.log(randomResult);
+  }, [randomResult]);
+
+  const handleRandom = () => {
+    let data: any = document.querySelector("#random_word");
+    data?.checked;
+    setRandomWord(data?.checked);
   };
 
   const handleShare = (e: any) => {
@@ -280,7 +309,7 @@ export default function Template() {
   };
 
   const handlePreview = () => {
-    // handleSave();
+    handleSave();
     setSaveTemplate(!saveTemplate);
   };
 
@@ -343,7 +372,12 @@ export default function Template() {
           <div className={styles.wrap}>
             <div className={styles.label}>Mau Acak Suratnya?</div>
             <label className={`${styles.label} ${styles.random_label}`}>
-              <input type="checkbox" />
+              <input
+                id="random_word"
+                name="random_word"
+                type="checkbox"
+                onChange={handleRandom}
+              />
               <span className={styles.slider}></span>
             </label>
           </div>
@@ -400,22 +434,29 @@ export default function Template() {
                 <div className={styles.letterForText}>
                   Untuk : {showForm ? "******" : data?.receive_name}
                 </div>
-                <div className={styles.templateText}>{dataCookie.result}</div>
+                <div className={styles.templateText}>
+                  {randomWord ? randomResult.join(" ") : dataCookie.result}
+                </div>
                 <div className={styles.templateUrl}>
-                  Mau tau artinya? download Kamus Nostalgia di playstore dan
-                  masukkin ID : {randomizeNumber}
+                  Mau tau artinya? download Kamus Nostalgia di playstore atau
+                  kunjungi shorturl.at/afgU5 dan masukkan ID : {randomizeNumber}
                 </div>
               </div>
               <div className={styles.wrapperMain}>
                 <div className={styles.wrapperButton}>
                   <button
+                    disabled={data !== undefined ? false : true}
                     onClick={handleDownload}
                     className={styles.buttonSave}
                   >
                     Download!
                   </button>
                   {!isMobile && (
-                    <button onClick={handleShare} className={styles.buttonSave}>
+                    <button
+                      disabled={data !== undefined ? false : true}
+                      onClick={handleShare}
+                      className={styles.buttonSave}
+                    >
                       Share!
                     </button>
                   )}
