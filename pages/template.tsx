@@ -267,16 +267,38 @@ export default function Template() {
     }
   };
 
+  function shuffle(array) {
+    let currentIndex = array.length,
+      randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ];
+    }
+
+    return array;
+  }
   useEffect(() => {
     if (randomWord) {
       const newData = randomResult;
+
       let tmp = dataCookie?.result.split(" ");
-      let length = tmp.length;
-      for (let i = 0; i < length; i++) {
-        let randomNumber = Math.floor(Math.random() * length);
-        newData.push(tmp[randomNumber]);
-      }
-      setRandomResult(newData);
+      let result = shuffle(tmp);
+      console.log(result);
+      // let length = tmp.length;
+      // for (let i = 0; i < length; i++) {
+      //   let randomNumber = Math.floor(Math.random() * length);
+      //   newData.push(tmp[randomNumber]);
+      // }
+      // setRandomResult(newData);
     }
   }, [randomWord, dataCookie]);
 
@@ -370,7 +392,7 @@ export default function Template() {
             placeholder="Masukkin jawabannya juga ya"
           />
           {/* <div className={styles.wrap}>
-            <div className={styles.label}>Mau Acak Suratnya?</div>
+            <div className={styles.label}>Mau Acak Isi Suratnya?</div>
             <label className={`${styles.label} ${styles.random_label}`}>
               <input
                 id="random_word"
