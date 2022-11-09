@@ -279,7 +279,7 @@ const MainScreen = () => {
 
             <div className="main-screen__selector">
               <div className="main-screen__selector-label">
-                Translate Kemana?
+                Pilih Bahasa Rahasia
               </div>
               <div className="main-screen__selector-container">
                 {convertWordList.map((item, index) => {
@@ -293,7 +293,7 @@ const MainScreen = () => {
                         "main-screen__active animate__animated animate__pulse animate__faster"
                       }`}
                     >
-                      {item}
+                      <div className="word-label">{item}</div>
                       {indexSelected == index && (
                         <span className="active-label">Bahasa {item}</span>
                       )}

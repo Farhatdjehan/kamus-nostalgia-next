@@ -9,10 +9,10 @@ $breakpoint-tablet: 768px;
   .header {
     height: 80px;
     padding: 16px 35px 16px 20px;
-    background-color: $red-primary;
+    background-color: $secondary-color;
     display: flex;
     align-items: flex-end;
-    color: #fff;
+    color: $white;
     font-weight: 700;
   }
 }

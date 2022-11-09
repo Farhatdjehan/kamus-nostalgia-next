@@ -15,8 +15,7 @@ $breakpoint-lg: 992px;
     flex-direction: column;
     position: relative;
     overflow-y: auto;
-    background-color: $red-primary;
-
+    background-color: $main-color;
     .dashboardContent {
       height: calc(100vh - 50px);
       // height: 100%;

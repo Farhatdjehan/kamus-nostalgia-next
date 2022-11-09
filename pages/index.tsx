@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../src/components/DashboardLayout";
 import styles from "./../styles/pages/Input.module.scss";
 import { app, database } from "./../firebase";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import "animate.css";
 export default function Input() {
   const router = useRouter();
@@ -15,11 +15,6 @@ export default function Input() {
   const [foundSearch, setFoundSearch]: any = useState(false);
   const [answerQuestion, setAnswerQuestion]: any = useState(false);
   const dbInstance = collection(database, "messages_list");
-
-  useEffect(() => {
-    // console.log(router);
-    // window?.ReactNativeWebView?.postMessage();
-  }, [router]);
 
   useEffect(() => {
     getNotes();
@@ -43,7 +38,7 @@ export default function Input() {
 
   useEffect(() => {
     if (answerQuestion) {
-      if (found[0].secure_answer == data?.answer.toLowerCase()) {
+      if (found[0].secure_answer == data?.answer?.toLowerCase()) {
         setAnswerQuestion(false);
         router.push(
           `/preview?id=${data?.id_message_1 + "-" + data?.id_message_2}`
@@ -76,7 +71,7 @@ export default function Input() {
       );
     });
   };
-  //   const handleSave = (e: any) => {};
+
   const handleSkip = (e: any) => {
     router.push("/write");
   };
@@ -98,32 +93,36 @@ export default function Input() {
     <DashboardLayout pageTitle="Input ID">
       {router?.query?.id && found ? (
         <div className={styles.wrapperInput}>
-          <div className={styles.title}>Jawab Dulu Ya!</div>
-          <div>
-            <div className={styles.titleQuestion}>
-              {found[0]?.secure_question}
+          <div
+            className={`${styles.wrapperFirst} animate__animated animate__bounceInDown animate__fast`}
+          >
+            <div className={`${styles.title}`}>Eitss.. Jawab Ini Dulu</div>
+            <div className={styles.subtitle}>
+              Kalau surat ini untuk kamu, pasti kamu bisa jawab!!
             </div>
-            <div className={styles.inputFull}>
-              <input onChange={handleChange} name="answer" id="answer" />
+            <div>
+              <div className={styles.titleQuestion}>
+                {found[0]?.secure_question}
+              </div>
+              <div className={styles.inputFull}>
+                <input onChange={handleChange} name="answer" id="answer" />
+              </div>
             </div>
           </div>
-
           <div className={styles.wrapBtn}>
-            <button className={styles.skip} onClick={() => router.back()}>
-              Kembali
-            </button>
-            <button onClick={handleAnswer}>Submit</button>
+            <button onClick={handleAnswer}>Kirim Jawaban</button>
+            <div className={styles.skip} onClick={handleSkip}>
+              Belum menerima surat, <b>lewati ini</b>
+            </div>
           </div>
         </div>
       ) : (
         <div className={styles.wrapperInput}>
-          {/* <div
-            className={`${styles.title} animate__animated animate__bounceInDown animate__fast`}
+          <div
+            className={`${styles.wrapperFirst} animate__animated animate__bounceInDown animate__fast`}
           >
-            Kamu Dapat Surat!
-          </div> */}
-          <div className="animate__animated animate__bounceInDown animate__fast">
-            <div className={`${styles.title}`}>Masukkan ID Surat</div>
+            <div className={`${styles.title}`}>Masukkan ID</div>
+            <div className={styles.subtitle}>ID suratnya jangan salah ya!</div>
             <div className={styles.wrapperID}>
               <div className={styles.input}>
                 <input
@@ -146,12 +145,22 @@ export default function Input() {
                 />
               </div>
             </div>
+            <div className={styles.tipsInfo}>
+              <div className={styles.info}>i</div>
+              <div className={styles.tips}>
+                ID Surat tertera pada{" "}
+                <span>
+                  <b>pojok kanan</b>
+                </span>{" "}
+                dari surat yang kamu terima
+              </div>
+            </div>
           </div>
           <div className={styles.wrapBtn}>
-            <button className={styles.skip} onClick={handleSkip}>
-              Saya Ingin Menulis Surat
-            </button>
             <button onClick={handleSubmit}>Simpan</button>
+            <div className={styles.skip} onClick={handleSkip}>
+              Belum menerima surat, <b>lewati ini</b>
+            </div>
           </div>
         </div>
       )}

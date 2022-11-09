@@ -52,7 +52,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #d5334b;
   height: 100vh;
 }
 
@@ -61,7 +60,7 @@ body {
 }
 
 button:disabled {
-  background-color: #be2239bb !important;
+  // background-color: #be2239bb !important;
 }
 
 .main-screen__dictionary {
@@ -76,17 +75,13 @@ button:disabled {
   padding: 0 16px;
   display: flex;
   flex-direction: column;
-  // margin-bottom: 24px;
 }
 .main-screen__title {
-  // height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   color: #fff;
-  // margin-bottom: 24px;
-  // margin-top: 12px;
 }
 .main-screen__input {
   margin-bottom: 8px;
@@ -101,9 +96,6 @@ button:disabled {
   overflow: hidden;
   margin-bottom: 16px;
 }
-// textarea::placeholder {
-//   visibility: hidden;
-// }
 .main-screen__times {
   position: absolute;
   right: 16px;
@@ -112,12 +104,9 @@ button:disabled {
   font-weight: bold;
   color: lightgray;
 }
-.main-screen__selector {
-  /* display: flex; */
-}
 .main-screen__selector-label {
   font-weight: bold;
-  color: #fff;
+  color: $third-color;
   margin-bottom: 12px;
 }
 .main-screen__selector-container {
@@ -129,7 +118,7 @@ button:disabled {
   width: 40px;
   height: 40px;
   margin-right: 12px;
-  background-color: #be2239;
+  background-color: $secondary-color;
   border-radius: 25px;
   display: flex;
   align-items: center;
@@ -137,28 +126,22 @@ button:disabled {
   font-weight: bolder;
   color: #fff;
 }
-.coming-soon__label {
-  background-color: #ffffff;
-  position: absolute;
-  font-size: 8px;
-  color: black;
-  bottom: 0;
-  padding: 0px 4px;
-  border-radius: 8px;
-}
 .main-screen__active {
-  background-color: #fff;
-  color: #be2239;
-  width: 125px;
+  background-color: $white;
+  width: max-content;
   & .active-label {
-    margin-left: 8px;
-    font-size: 10px;
+    // margin-left: 8px;
+    font-size: 12px;
     font-weight: 600;
     line-height: 20px;
-    background: #be2239;
+    background: $secondary-color;
     border-radius: 24px;
-    padding: 0px 12px;
-    color: #fff;
+    padding: 10px 16px;
+    color: $white;
+  }
+  & .word-label {
+    margin: 8px;
+    color: $secondary-color;
   }
 }
 .loading_messages {
@@ -167,11 +150,11 @@ button:disabled {
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  color: white;
+  color: $white;
   font-weight: 600;
 }
 .main-screen__result {
-  background-color: #fff;
+  background-color: $white;
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   height: inherit;
@@ -181,11 +164,13 @@ button:disabled {
 }
 .main-screen__result-label {
   font-weight: bolder;
-  /* margin-bottom: 16px; */
+}
+::-webkit-scrollbar {
+  display: none;
 }
 .main-screen__result-convert {
   padding: 16px;
-  background-color: lightgray;
+  border: 3px solid $third-color;
   border-radius: 24px;
   height: 100%;
   white-space: pre-wrap;
@@ -195,7 +180,6 @@ button:disabled {
   padding-top: 16px;
   display: flex;
   justify-content: space-between;
-  /* text-align: end;/ */
 }
 .main-button__wrapper {
   display: flex;
@@ -212,7 +196,7 @@ button:disabled {
   border-radius: 8px;
   color: #fff;
   font-weight: 600;
-  background-color: #be2239;
+  background-color: $secondary-color;
   display: flex;
   align-items: center;
 }
@@ -232,7 +216,6 @@ button:disabled {
   left: 0;
   right: 0;
   width: fit-content;
-  /* display: none; */
 }
 .toast-text {
   font-weight: 600;
@@ -251,11 +234,11 @@ button:disabled {
   font-weight: 700;
   cursor: pointer;
   padding: 8px 12px;
-  color: #000;
+  color: $third-color;
   display: flex;
   align-items: center;
   border-radius: 24px;
-  border: 2px solid white;
+  border: 3px solid $secondary-color;
 }
 .active-reverse {
   background-color: white;
@@ -321,35 +304,6 @@ button:disabled {
 
 .pro-sidebar .pro-menu {
   padding-top: 24px 8px !important;
-}
-
-.breadcrumb-page {
-  padding: 16px 0;
-  display: flex;
-  .breadcrumb-page__list {
-    color: #7b632f;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 24px;
-    text-transform: capitalize;
-    &:last-child {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    @media (min-width: 768px) {
-      font-size: 16px;
-    }
-  }
-  .breadcrumb-separator {
-    color: #7b632f;
-    font-weight: 500;
-    font-size: 16px;
-    margin: 0 8px;
-  }
-  .breadcrumb-page__active {
-    color: $blue-primary;
-  }
 }
 
 button,

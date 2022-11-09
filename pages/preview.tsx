@@ -6,6 +6,7 @@ import styles from "./../styles/pages/Template.module.scss";
 import { database } from "./../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Preview() {
   const router = useRouter();
@@ -64,18 +65,7 @@ export default function Preview() {
         <div className="loading_messages">Loading...</div>
       ) : (
         <div className={styles.wrapperTemplate}>
-          <div
-            className={styles.titlePreview}
-            style={{
-              marginBottom: "32px",
-              textAlign: "center",
-              fontSize: "20px",
-              fontWeight: 700,
-              color: "white",
-            }}
-          >
-            Sttt.. Ini Pesannya!
-          </div>
+          <div className={styles.titlePreview}>Sttt.. Ini Pesannya!</div>
           {id !== undefined && tempalteData.length > 0 && (
             <div className={styles.wrapperImage}>
               <div className={styles.templateImage}>
@@ -100,6 +90,11 @@ export default function Preview() {
               </div>
             </div>
           )}
+          <Link href="/write" passHref>
+            <div className={styles.another}>
+              Mau bales <b>suratnya?</b>
+            </div>
+          </Link>
         </div>
       )}
     </DashboardLayout>

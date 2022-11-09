@@ -11,7 +11,6 @@ import { exportAsImage, getCookie, saveImage } from "../src/helpers/common";
 import { useRouter } from "next/router";
 import { app, database } from "./../firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
-import axios from "axios";
 import Modal from "react-modal";
 import whatsapp from "./../public/whatsapp.png";
 import facebook from "./../public/facebook.png";
@@ -173,8 +172,6 @@ export default function Template() {
   // };
 
   const handleSave = () => {
-    // setSocialMedia(id);
-    console.log(randomizeNumber, data);
     if (
       dataCookie !== undefined &&
       randomizeNumber !== undefined &&
@@ -190,7 +187,7 @@ export default function Template() {
         randomize_text: randomWord ? randomResult : "",
         receive_from: showForm ? "********" : data?.receive_name,
         original_receive_from: data?.receive_name,
-        secure_answer: data?.answer.toLowerCase(),
+        secure_answer: data?.answer?.toLowerCase(),
         secure_question: data?.question,
         send_to: senderShowForm ? "********" : data?.sender_name,
         original_send_to: data?.sender_name,
@@ -292,19 +289,8 @@ export default function Template() {
 
       let tmp = dataCookie?.result.split(" ");
       let result = shuffle(tmp);
-      console.log(result);
-      // let length = tmp.length;
-      // for (let i = 0; i < length; i++) {
-      //   let randomNumber = Math.floor(Math.random() * length);
-      //   newData.push(tmp[randomNumber]);
-      // }
-      // setRandomResult(newData);
     }
   }, [randomWord, dataCookie]);
-
-  useEffect(() => {
-    console.log(randomResult);
-  }, [randomResult]);
 
   const handleRandom = () => {
     let data: any = document.querySelector("#random_word");
@@ -334,6 +320,12 @@ export default function Template() {
     handleSave();
     setSaveTemplate(!saveTemplate);
   };
+
+  useEffect(() => {
+    if (randomizeNumber) {
+      console.log(randomizeNumber.toString());
+    }
+  }, [randomizeNumber]);
 
   return (
     <DashboardLayout pageTitle="Pilih Template">
@@ -391,18 +383,6 @@ export default function Template() {
             name="answer"
             placeholder="Masukkin jawabannya juga ya"
           />
-          {/* <div className={styles.wrap}>
-            <div className={styles.label}>Mau Acak Isi Suratnya?</div>
-            <label className={`${styles.label} ${styles.random_label}`}>
-              <input
-                id="random_word"
-                name="random_word"
-                type="checkbox"
-                onChange={handleRandom}
-              />
-              <span className={styles.slider}></span>
-            </label>
-          </div> */}
         </div>
 
         <div className={styles.mainTitle}>Pilih Template</div>
@@ -425,7 +405,7 @@ export default function Template() {
                     />
                   </div>
                   <div className={styles.title}>Template {index + 1}</div>
-                  <div className={styles.subtitle}>Love Letter</div>
+                  <div className={styles.subtitle}>Letter {index + 1}</div>
                 </div>
               </div>
             );
@@ -449,7 +429,13 @@ export default function Template() {
                     layout="responsive"
                   />
                 </div>
-                <div className={styles.letterId}>ID : {randomizeNumber}</div>
+                <div className={styles.letterId}>
+                  ID :{" "}
+                  {randomizeNumber !== undefined &&
+                    randomizeNumber
+                      ?.toString()
+                      ?.replace(/(\d{3})(\d{3})/, "$1-$2")}
+                </div>
                 <div className={styles.letterText}>
                   Dari : {senderShowForm ? "******" : data?.sender_name}
                 </div>
@@ -460,8 +446,12 @@ export default function Template() {
                   {randomWord ? randomResult.join(" ") : dataCookie.result}
                 </div>
                 <div className={styles.templateUrl}>
-                  Mau tau artinya? download Kamus Nostalgia di playstore dan
-                  masukkan ID : {randomizeNumber}
+                  Download Kamus Nostalgia di playstore dan masukkan ID :{" "}
+                  {randomizeNumber !== undefined &&
+                    randomizeNumber
+                      ?.toString()
+                      ?.replace(/(\d{3})(\d{3})/, "$1-$2")}{" "}
+                  dan temukan artinya!
                 </div>
               </div>
               <div className={styles.wrapperMain}>
@@ -477,7 +467,7 @@ export default function Template() {
                     <button
                       disabled={data !== undefined ? false : true}
                       onClick={handleShare}
-                      className={styles.buttonSave}
+                      className={`${styles.buttonSave} ${styles.outlineButton}`}
                     >
                       Share!
                     </button>
