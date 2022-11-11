@@ -6,6 +6,9 @@ import DashboardLayout from "../src/components/DashboardLayout";
 import styles from "./../styles/pages/Input.module.scss";
 import { app, database } from "./../firebase";
 import { collection, getDocs } from "firebase/firestore";
+import Lottie from "react-lottie";
+import * as messages from "./../src/components/messages.json";
+
 import "animate.css";
 export default function Input() {
   const router = useRouter();
@@ -89,6 +92,15 @@ export default function Input() {
     e.preventDefault();
     setAnswerQuestion(true);
   };
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: messages,
+    // rendererSettings: {
+    //   preserveAspectRatio: "xMidYMid slice",
+    // },
+  };
   return (
     <DashboardLayout pageTitle="Input ID">
       {router?.query?.id && found ? (
@@ -118,41 +130,46 @@ export default function Input() {
         </div>
       ) : (
         <div className={styles.wrapperInput}>
-          <div
-            className={`${styles.wrapperFirst} animate__animated animate__bounceInDown animate__fast`}
-          >
-            <div className={`${styles.title}`}>Masukkan ID</div>
-            <div className={styles.subtitle}>ID suratnya jangan salah ya!</div>
-            <div className={styles.wrapperID}>
-              <div className={styles.input}>
-                <input
-                  onChange={handleChange}
-                  name="id_message_1"
-                  id="id_message_1"
-                />
+          <div className={styles.wrapperLottie}>
+            <Lottie options={defaultOptions} width={120} height={120} />
+          </div>
+          <div className={`${styles.wrapperFirst}`}>
+            <div className={styles.wrapperInputData}>
+              <div className={`${styles.title}`}>Masukkan ID</div>
+              <div className={styles.subtitle}>
+                ID suratnya jangan salah ya!
               </div>
-              <div
-                className={styles.dash}
-                style={{ fontWeight: 700, color: "white" }}
-              >
-                -
+              <div className={styles.wrapperID}>
+                <div className={styles.input}>
+                  <input
+                    onChange={handleChange}
+                    name="id_message_1"
+                    id="id_message_1"
+                  />
+                </div>
+                <div
+                  className={styles.dash}
+                  style={{ fontWeight: 700, color: "white" }}
+                >
+                  -
+                </div>
+                <div className={styles.input}>
+                  <input
+                    onChange={handleChange}
+                    name="id_message_2"
+                    id="id_message_2"
+                  />
+                </div>
               </div>
-              <div className={styles.input}>
-                <input
-                  onChange={handleChange}
-                  name="id_message_2"
-                  id="id_message_2"
-                />
-              </div>
-            </div>
-            <div className={styles.tipsInfo}>
-              <div className={styles.info}>i</div>
-              <div className={styles.tips}>
-                ID Surat tertera pada{" "}
-                <span>
-                  <b>pojok kanan</b>
-                </span>{" "}
-                dari surat yang kamu terima
+              <div className={styles.tipsInfo}>
+                <div className={styles.info}>i</div>
+                <div className={styles.tips}>
+                  ID Surat tertera pada{" "}
+                  <span>
+                    <b>pojok kanan</b>
+                  </span>{" "}
+                  dari surat yang kamu terima
+                </div>
               </div>
             </div>
           </div>
