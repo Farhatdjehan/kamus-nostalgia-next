@@ -7,7 +7,8 @@ import styles from "./../styles/pages/Input.module.scss";
 import { app, database } from "./../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Lottie from "react-lottie";
-import * as messages from "./../src/components/messages.json";
+import * as messages from "./../src/components/get_msg.json";
+import * as question from "./../src/components/question.json";
 
 import "animate.css";
 export default function Input() {
@@ -97,17 +98,34 @@ export default function Input() {
     loop: true,
     autoplay: true,
     animationData: messages,
-    // rendererSettings: {
-    //   preserveAspectRatio: "xMidYMid slice",
-    // },
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+  const secondOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: question,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
   };
   return (
     <DashboardLayout pageTitle="Input ID">
       {router?.query?.id && found ? (
         <div className={styles.wrapperInput}>
           <div
-            className={`${styles.wrapperFirst} animate__animated animate__bounceInDown animate__fast`}
+            style={{ pointerEvents: "none" }}
+            className={`${styles.wrapperLottie} animate__animated animate__faster animate__tada`}
           >
+            <Lottie
+              options={secondOptions}
+              height={190}
+              width={170}
+              isStopped={false}
+            />
+          </div>
+          <div className={`${styles.wrapperFirst}`}>
             <div className={`${styles.title}`}>Eitss.. Jawab Ini Dulu</div>
             <div className={styles.subtitle}>
               Kalau surat ini untuk kamu, pasti kamu bisa jawab!!
@@ -129,9 +147,12 @@ export default function Input() {
           </div>
         </div>
       ) : (
-        <div className={styles.wrapperInput}>
-          <div className={styles.wrapperLottie}>
-            <Lottie options={defaultOptions} width={120} height={120} />
+        <div className={`${styles.wrapperInput} `}>
+          <div
+            style={{ pointerEvents: "none" }}
+            className={`${styles.wrapperLottie} animate__animated animate__faster animate__tada`}
+          >
+            <Lottie options={defaultOptions} isStopped={false} />
           </div>
           <div className={`${styles.wrapperFirst}`}>
             <div className={styles.wrapperInputData}>
@@ -174,7 +195,12 @@ export default function Input() {
             </div>
           </div>
           <div className={styles.wrapBtn}>
-            <button onClick={handleSubmit}>Simpan</button>
+            <button
+              className="animate__animated animate__faster animate__bounceIn"
+              onClick={handleSubmit}
+            >
+              Simpan
+            </button>
             <div className={styles.skip} onClick={handleSkip}>
               Belum menerima surat, <b>lewati ini</b>
             </div>

@@ -104,32 +104,6 @@ export default function Template() {
     setIdData(index);
   };
 
-  // const save = (file: string, fileName: string) => {
-  //   const linkSource = `${file}`;
-  //   const downloadLink = document.createElement("a");
-  //   document.body.appendChild(downloadLink);
-  //   downloadLink.href = linkSource;
-  //   downloadLink.download = fileName;
-  //   downloadLink.click();
-  // };
-
-  // const dataURLtoFile = (dataurl: any, filename: any) => {
-  //   let atobData: any = atob;
-  //   var arr = dataurl.split(","),
-  //     mime = arr[0].match(/:(.*?);/)[1],
-  //     bstr = window.atob(arr[1]),
-  //     n = bstr.length,
-  //     u8arr = new Uint8Array(n);
-
-  //   while (n--) {
-  //     u8arr[n] = bstr.charCodeAt(n);
-  //   }
-
-  //   return new File([u8arr], filename, {
-  //     type: mime,
-  //   });
-  // };
-
   const handleChange = (e: any) => {
     e.preventDefault();
     const newData = { ...data };
@@ -150,26 +124,6 @@ export default function Template() {
     setShowForm(data?.checked);
   };
 
-  // const fetchData = async (value: string, id: number) => {
-  //   try {
-  //     const response = await axios(
-  //       `https://api.shrtco.de/v2/shorten?url=${value}`
-  //     );
-  //     if (response !== undefined) {
-  //       let data;
-  //       if (id === 1) {
-  //         data = `https://wa.me/?text=Hai,%20Aku%20ada%20sesuatu%20untuk%20kamu!.%20Cek%20link%20ini%20:%20${response.data.result.full_short_link}`;
-  //       } else if (id === 2) {
-  //         data = `http://twitter.com/share?text=Hai,%20Aku%20ada%20sesuatu%20untuk%20kamu!.%20Cek%20link%20ini%20:%20${response.data.result.full_short_link}`;
-  //       } else {
-  //         data = `https://www.facebook.com/sharer/sharer.php?u=${response.data.result.full_short_link}&amp;src=sdkpreparse`;
-  //       }
-  //       setLink(data);
-  //     }
-  //   } catch (e) {
-  //     console.log(e, "<==");
-  //   }
-  // };
 
   const handleSave = () => {
     if (
