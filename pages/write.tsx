@@ -293,7 +293,7 @@ const MainScreen = () => {
                         "main-screen__active animate__animated animate__pulse animate__faster"
                       }`}
                     >
-                      <div className="word-label">{item}</div>
+                      {item}
                       {indexSelected == index && (
                         <span className="active-label">Bahasa {item}</span>
                       )}
