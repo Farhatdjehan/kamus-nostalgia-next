@@ -19,6 +19,7 @@ $breakpoint-lg: 992px;
     .dashboardContent {
       height: calc(100vh - 50px);
       // height: 100%;
+      overflow: auto;
       padding-bottom: 74px;
       padding: 12px 0px 0px;
       max-width: 500px;

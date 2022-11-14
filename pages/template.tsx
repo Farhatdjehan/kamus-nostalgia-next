@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
-import { isMobile } from "react-device-detect";
+// import { isMobile } from "react-device-detect";
 import Image from "next/image";
 import Link from "next/link";
 import DashboardLayout from "../src/components/DashboardLayout";
@@ -20,6 +20,7 @@ export default function Template() {
   const router = useRouter();
   const exportRef: any = useRef<HTMLDivElement>();
   const [idData, setIdData]: any = useState();
+  const [platform, setPlatform]: any = useState();
   const [randomDataCookie, setRandomDataCookie]: any = useState();
   const [saveTemplate, setSaveTemplate]: any = useState();
   const [randomizeNumber, setRandomizeNumber]: any = useState();
@@ -94,6 +95,24 @@ export default function Template() {
   }, []);
 
   useEffect(() => {
+    const getDeviceType = () => {
+      const ua = navigator.userAgent;
+      if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+        return "tablet";
+      }
+      if (
+        /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+          ua
+        )
+      ) {
+        return "mobile";
+      }
+      return "desktop";
+    };
+    setPlatform(getDeviceType);
+  }, []);
+
+  useEffect(() => {
     if (data?.sender === undefined && data?.receiver === undefined) {
       setSaveTemplate(false);
     }
@@ -123,7 +142,6 @@ export default function Template() {
     data?.checked;
     setShowForm(data?.checked);
   };
-
 
   const handleSave = () => {
     if (
@@ -417,7 +435,7 @@ export default function Template() {
                   >
                     Download!
                   </button>
-                  {!isMobile && (
+                  {platform === "desktop" && (
                     <button
                       disabled={data !== undefined ? false : true}
                       onClick={handleShare}

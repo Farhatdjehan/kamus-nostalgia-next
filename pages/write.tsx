@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { convertWord, setCookie } from "../src/helpers/common";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import sound from "./../public/sound.png";
-import save from "./../public/save.png";
 import "animate.css";
 import copy from "./../public/copy.png";
 import Image from "next/image";
@@ -14,7 +13,6 @@ import swapWhite from "./../public/swap_white.png";
 import DashboardLayout from "../src/components/DashboardLayout";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { isMobile } from "react-device-detect";
 
 const MainScreen = () => {
   const convertWordList = ["G", "S", "P", "U"];
@@ -32,8 +30,18 @@ const MainScreen = () => {
   const [reverseUpdated, setReverseUpdated]: any = useState();
   const [indexSelected, setIndexSelected]: any = useState(0);
   const [keyValue, setKeyValue]: any = useState(0);
-  const [voice, setVoice]: any = useState();
+  const [url, setUrl]: any = useState();
   const [languangeType, setLanguangeType]: any = useState();
+
+  useEffect(() => {
+    if (router?.query?.platform !== undefined) {
+      setUrl(router?.query?.platform);
+    }
+  }, [router]);
+
+  useEffect(() => {
+    console.log(router?.query?.platform);
+  }, [router]);
 
   useEffect(() => {
     setLanguangeType(convertWordList[indexSelected]?.toLowerCase());
@@ -83,14 +91,16 @@ const MainScreen = () => {
     }
   }, [reverseShow, text, originalText]);
 
-  const speechHandler = (msgT: any) => {
+  const speechHandler = (e: any, msgT: any) => {
+    e.preventDefault();
+    let tmp = msgT ? reverse : text;
     if (reverse === undefined && text === undefined) {
       setCopied(true);
       setAnimationSound(true);
     } else {
       let msg = new SpeechSynthesisUtterance();
       msg.lang = "id-ID";
-      msg.text = msgT;
+      msg.text = tmp;
       if ("speechSynthesis" in window) {
         window.speechSynthesis.speak(msg);
       }
@@ -119,9 +129,9 @@ const MainScreen = () => {
     return operatingSystem;
   }
 
-  const OS = (window) => {
-    return getOperatingSystem(window); // <-- missing return
-  };
+  // const OS = (window) => {
+  //   return getOperatingSystem(window); // <-- missing return
+  // };
   useEffect(() => {
     if (reverseShow) {
       window?.ReactNativeWebView?.postMessage(reverse);
@@ -130,9 +140,9 @@ const MainScreen = () => {
     }
   }, [reverseShow, reverse, text]);
 
-  useEffect(() => {
-    setPlatform(OS(window));
-  }, []);
+  // useEffect(() => {
+  //   setPlatform(OS(window));
+  // }, []);
 
   const handleChange = (e) => {
     let tmp = e.target.value;
@@ -246,6 +256,24 @@ const MainScreen = () => {
     setAnimationCopy(true);
   };
 
+  useEffect(() => {
+    const getDeviceType = () => {
+      const ua = navigator.userAgent;
+      if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+        return "tablet";
+      }
+      if (
+        /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+          ua
+        )
+      ) {
+        return "mobile";
+      }
+      return "desktop";
+    };
+    setPlatform(getDeviceType);
+  }, []);
+
   const handlePush = () => {
     let push;
     let tmp = {};
@@ -307,7 +335,6 @@ const MainScreen = () => {
                   }`}
                   onClick={reverseWord}
                 >
-                  {/* Reverse{"  "} */}
                   {reverseShow ? (
                     <Image src={swap} width={18} height={8} />
                   ) : (
@@ -348,30 +375,23 @@ const MainScreen = () => {
                     "animate__animated animate__pulse animate__faster"
                   }`}
                 >
-                  <span style={{ display: "flex" }}>
-                    <img width={15} height={15} src={copy.src} />
-                  </span>
-                  {/* Salin */}
+                  <Image width={15} height={15} src={copy.src} />
                 </button>
               </CopyToClipboard>
-              {!isMobile && (
-                <div id="button-sound">
-                  <button
-                    className={`main-screen__button ${
-                      animationSound &&
-                      "animate__animated animate__pulse animate__faster"
-                    }`}
-                    onClick={() => speechHandler(reverseShow ? reverse : text)}
-                  >
-                    <span style={{ display: "flex" }}>
-                      <img width={15} height={15} src={sound.src} />
-                    </span>
-                  </button>
-                </div>
+
+              {platform === "desktop" && (
+                <button
+                  className={`main-screen__button ${
+                    animationSound &&
+                    "animate__animated animate__pulse animate__faster"
+                  }`}
+                  onClick={(e) => speechHandler(e, reverseShow)}
+                >
+                  <Image width={15} height={15} src={sound.src} />
+                </button>
               )}
             </div>
             <div>
-              {/* <Link href={`/template`} passHref> */}
               <button
                 disabled={
                   reverse === undefined && text === undefined ? true : false
@@ -382,7 +402,6 @@ const MainScreen = () => {
                 Pilih Template
                 <span style={{ display: "flex", marginLeft: "8px" }}>→</span>
               </button>
-              {/* </Link> */}
             </div>
           </div>
           {copied && (
@@ -391,13 +410,6 @@ const MainScreen = () => {
                 {reverse === undefined && text === undefined
                   ? "Masukkan Kata Dulu!"
                   : "Berhasil menyalin!"}
-              </div>
-            </div>
-          )}
-          {disable && (
-            <div className="main-screen__toast">
-              <div className="toast-text">
-                Fitur Membuat Kalimat Belum Tersedia!
               </div>
             </div>
           )}

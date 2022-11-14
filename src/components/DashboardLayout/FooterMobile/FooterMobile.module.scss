@@ -1,56 +1,55 @@
-@import './../../../../styles/variables';
+@import "./../../../../styles/variables";
 
-.container {
+.footerContainer {
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  .left {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0 1rem;
-    background: #fff;
-    height: 74px;
-    box-shadow: $box-shadow;
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-}
-
-.menuWrapper {
-    width: 94px;
-    height: 58px;
-    text-align: center;
-    color: #9EC2DE;
-
-    .title {
+    padding: 10px 24px;
+    flex: 60%;
+    .logo {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      border-radius: 6px;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+      .word {
         font-weight: 700;
-        font-size: 12px;
-        line-height: 18px;
-        text-align: center;
-        display: inline-block;
-        padding-bottom: 4px;
-        border-bottom: 2px solid transparent;
-
+        color: white;
+      }
     }
-
-    .logoWrapper {
-        margin-bottom: 4px;
-
-        &.globe::before {
-            width: 24px;
-            height: 24px;
-            display: block;
-            margin: auto;
-            content: url('./../../../../public/assets/svg/globe-inactive.svg');
-        }
+    .text {
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 12px;
+      display: flex;
+      align-items: center;
+      color: #212529;
+      margin-left: 10px;
+      text-align: left;
     }
-
-    &.active {
-        color: $blue-primary;
-
-        .title {
-            border-bottom: 2px solid $blue-primary;
-        }
-
-        .globe::before {
-            content: url('./../../../../public/assets/svg/globe-blue.svg');
-        }
+  }
+  .right {
+    display: flex;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    flex: 40%;
+    flex-direction: column;
+    text-align: end;
+    padding: 4px 24px 4px 20px;
+    .title {
+      font-size: 8px;
+      line-height: 12px;
+      white-space: nowrap;
+      margin-bottom: 2px;
+      color: white;
     }
+    .img {
+      flex-shrink: 0;
+      height: 0;
+    }
+  }
 }

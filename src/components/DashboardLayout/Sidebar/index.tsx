@@ -132,7 +132,7 @@ export default function Sidebar(props: SidebarProps) {
               <CopyToClipboard text={url} onCopy={handleCopy}>
                 <button
                   className={`main-screen__button ${
-                    copied && "animate__animated animate__pulse animate__faster"
+                    copied && 'animate__animated animate__pulse animate__faster'
                   }`}
                 >
                   <span style={{ marginRight: "8px" }}>

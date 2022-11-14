@@ -1,6 +1,5 @@
 import styles from "./DashboardLayout.module.scss";
-import { ReactNode, useEffect, useState } from "react";
-import Link from "next/link";
+import { ReactNode, useState } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import FooterMobile from "./FooterMobile";
@@ -21,6 +20,7 @@ export default function DashboardLayout(props: DashboardLayoutProps) {
   }
 
   return (
+    
     <div className={styles.pageWrapper}>
       <Helmet pageTitle={pageTitle} />
       <Sidebar handleToggle={handleToggle} toggle={toggle} />
@@ -29,7 +29,7 @@ export default function DashboardLayout(props: DashboardLayoutProps) {
         <section className={styles.dashboardContent}>
           {children}
         </section>
-       {/* <FooterMobile /> */}
+       <FooterMobile />
       </main>
     </div>
   );
