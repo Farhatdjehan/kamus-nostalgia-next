@@ -7,40 +7,38 @@ interface HelmetProps {
 export default function Helmet(props: HelmetProps) {
   const { pageTitle } = props;
 
-  const image = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAHNJREFUKFOdkLEKwCAMRM/JwUFwdPb/v8RPEDcdBQcHJyUt0hQ6hGY6Li8XEhVjXM45aK3xVXNOtNagcs6LRAgB1toX23tHSgkUpEopyxhzGRw+EHljjBv03oM3KJYP1lofkJoHJs3T/4Gi1aJjxO+RPnwDur2EF1gNZukAAAAASUVORK5CYII=`;
-
   return (
     <>
       <Head>
-        <title>Kamus Nostalgia - Translator Bahasa G | {pageTitle}</title>
+        <title>Surat Rahasia - Biarkan si Dia Tau Isi Hati Kamu!  | {pageTitle}</title>
         <meta
           name="description"
-          content="Nostalgia bersama bahasa G yang sempet booming yuk!"
+          content="Malu buat ngomong langsung tentang sesuatu ke si dia? buat surat rahasia aja!"
         />
         <meta name="image" content="https://i.ibb.co/M7Ncnpr/logo-kamus.png" />
         <meta property="og:url" content="https://kamus-nostalgia.vercel.app" />
         <meta property="og:type" content="website" />
         <meta
           property="og:title"
-          content={`Kamus Nostalgia - Translator Bahasa G | ${pageTitle}`}
+          content={`Surat Rahasia - Biarkan si Dia Tau Isi Hati Kamu! | ${pageTitle}`}
         />
         <meta
           property="og:description"
-          content="Nostalgia bersama bahasa G yang sempet booming yuk!"
+          content="Malu buat ngomong langsung tentang sesuatu ke si dia? buat surat rahasia aja!"
         />
-        <meta property="og:image" content={image} />
+        <meta property="og:image" content="https://i.ibb.co/fXwrq61/logo-surat.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content={`Kamus Nostalgia - Translator Bahasa G | ${pageTitle}`}
+          content={`Surat Rahasia - Biarkan si Dia Tau Isi Hati Kamu! | ${pageTitle}`}
         />
         <meta
           name="twitter:description"
-          content="Nostalgia bersama bahasa G yang sempet booming yuk!"
+          content="Malu buat ngomong langsung tentang sesuatu ke si dia? buat surat rahasia aja!"
         />
         <meta
           name="twitter:image"
-          content="https://i.ibb.co/M7Ncnpr/logo-kamus.png"
+          content="https://i.ibb.co/fXwrq61/logo-surat.png"
         ></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
