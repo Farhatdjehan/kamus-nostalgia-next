@@ -295,7 +295,7 @@ export default function Template() {
 
   useEffect(() => {
     if (randomizeNumber) {
-      console.log(randomizeNumber.toString());
+      // console.log(randomizeNumber.toString());
     }
   }, [randomizeNumber]);
 
@@ -312,6 +312,7 @@ export default function Template() {
               name="sender_name"
               placeholder="Nama mu siapa?"
             />
+
             <div className={`${styles.showCheck} ${styles.marginBottom}`}>
               <input
                 onChange={handleCheckSender}

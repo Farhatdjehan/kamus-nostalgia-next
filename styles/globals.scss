@@ -133,7 +133,7 @@ button:disabled {
   color: $secondary-color;
   & .active-label {
     // margin-left: 8px;
-    
+
     font-size: 10px;
     font-weight: 600;
     line-height: 20px;
@@ -324,6 +324,15 @@ button,
   font-size: 14px;
   margin-bottom: 12px;
   line-height: 16px;
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+}
+
+button:disabled {
+  opacity: 0.5;
 }
 
 .wrapper-btn {

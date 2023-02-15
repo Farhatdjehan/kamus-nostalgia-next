@@ -77,9 +77,11 @@ export default function Sidebar(props: SidebarProps) {
     if (id === 1) {
       share =
         "https://api.whatsapp.com/send?phone=+6282311888360&text=Aku%20mau%20kasih%20masukkan%20dong!";
-    } else {
+    } else if (id === 2) {
       share =
         "https://play.google.com/store/apps/details?id=com.koneksi.kamnos";
+    } else {
+      share = "https://play.google.com/store/apps/developer?id=Koneksi+Group";
     }
     window.open(share, "_blank")?.focus();
   };
@@ -116,6 +118,12 @@ export default function Sidebar(props: SidebarProps) {
                 <a></a>
               </Link>
             </MenuItem>
+            <MenuItem onClick={(e) => redirectOpen(e, 3)}>
+              Aplikasi Lainnya
+              <Link href="#">
+                <a></a>
+              </Link>
+            </MenuItem>
           </Menu>
         </SidebarContent>
       </ProSidebar>
@@ -132,7 +140,7 @@ export default function Sidebar(props: SidebarProps) {
               <CopyToClipboard text={url} onCopy={handleCopy}>
                 <button
                   className={`main-screen__button ${
-                    copied && 'animate__animated animate__pulse animate__faster'
+                    copied && "animate__animated animate__pulse animate__faster"
                   }`}
                 >
                   <span style={{ marginRight: "8px" }}>

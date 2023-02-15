@@ -13,6 +13,8 @@ import swapWhite from "./../public/swap_white.png";
 import DashboardLayout from "../src/components/DashboardLayout";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { count } from "console";
+import Error from "../src/components/common/Error";
 
 const MainScreen = () => {
   const convertWordList = ["G", "S", "P", "U"];
@@ -20,9 +22,9 @@ const MainScreen = () => {
   const [text, setText]: any = useState();
   const [platform, setPlatform]: any = useState();
   const [originalText, setOriginalText]: any = useState();
+  const [countChar, setCountChar]: any = useState();
   const [copied, setCopied]: any = useState(false);
   const [reverseShow, setReverseShow]: any = useState(false);
-  const [reverseShowUpdate, setReverseShowUpdate]: any = useState(false);
   const [disable, setDisable]: any = useState(false);
   const [animationCopy, setAnimationCopy]: any = useState(false);
   const [animationSound, setAnimationSound]: any = useState(false);
@@ -37,10 +39,6 @@ const MainScreen = () => {
     if (router?.query?.platform !== undefined) {
       setUrl(router?.query?.platform);
     }
-  }, [router]);
-
-  useEffect(() => {
-    console.log(router?.query?.platform);
   }, [router]);
 
   useEffect(() => {
@@ -146,7 +144,7 @@ const MainScreen = () => {
 
   const handleChange = (e) => {
     let tmp = e.target.value;
-
+    setCountChar(tmp);
     if (reverseShow) {
       if (languangeType !== "u") {
         if (tmp !== "") {
@@ -295,7 +293,7 @@ const MainScreen = () => {
         <div className="main-screen__container">
           <div className="main-screen__input">
             <textarea
-              disabled={disable ? disable : false}
+              disabled={disable || countChar?.length > 255 ? disable : false}
               type="text"
               id="input"
               placeholder="Tulis surat kamu..."
@@ -394,7 +392,10 @@ const MainScreen = () => {
             <div>
               <button
                 disabled={
-                  reverse === undefined && text === undefined ? true : false
+                  (reverse === undefined && text === undefined) ||
+                  countChar?.length > 255
+                    ? true
+                    : false
                 }
                 onClick={handlePush}
                 className="main-screen__button"
@@ -412,6 +413,9 @@ const MainScreen = () => {
                   : "Berhasil menyalin!"}
               </div>
             </div>
+          )}
+          {countChar?.length > 255 && (
+            <Error title="Karakter melebihi batas!" />
           )}
         </div>
       </div>

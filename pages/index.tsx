@@ -9,8 +9,8 @@ import { collection, getDocs } from "firebase/firestore";
 import Lottie from "react-lottie";
 import * as messages from "./../src/components/get_msg.json";
 import * as question from "./../src/components/question.json";
-
 import "animate.css";
+
 export default function Input() {
   const router = useRouter();
   const [data, setData]: any = useState();

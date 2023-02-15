@@ -29,7 +29,7 @@ export default function DashboardLayout(props: DashboardLayoutProps) {
         <section className={styles.dashboardContent}>
           {children}
         </section>
-       <FooterMobile />
+       {/* <FooterMobile /> */}
       </main>
     </div>
   );
