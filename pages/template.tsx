@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 // import { isMobile } from "react-device-detect";
 import Image from "next/image";
 import Link from "next/link";
+import { ToastContainer, toast, TypeOptions } from "react-toastify";
+import "react-toastify/ReactToastify.min.css";
 import DashboardLayout from "../src/components/DashboardLayout";
 import styles from "./../styles/pages/Template.module.scss";
 import { template } from "./../src/helpers/imageTemplate";
@@ -16,8 +18,13 @@ import whatsapp from "./../public/whatsapp.png";
 import facebook from "./../public/facebook.png";
 import twitter from "./../public/twitter.png";
 import moment from "moment";
+import Error from "../src/components/common/Error";
 export default function Template() {
   const router = useRouter();
+  const toastId = React.useRef(null);
+  const toastId2 = React.useRef(null);
+  const toastId3 = React.useRef(null);
+  const toastId4 = React.useRef(null);
   const exportRef: any = useRef<HTMLDivElement>();
   const [idData, setIdData]: any = useState();
   const [platform, setPlatform]: any = useState();
@@ -93,6 +100,21 @@ export default function Template() {
       setTemplateData(arr);
     }
   }, []);
+
+  useEffect(() => {
+    if (data?.sender_name?.length >= 50 && !toast.isActive(toastId.current)) {
+      toastId.current = toast("Nama Pengirim Melebihi Batas");
+    }
+    if (data?.receive_name?.length >= 50 && !toast.isActive(toastId2.current)) {
+      toastId2.current = toast("Nama Penerima Melebihi Batas");
+    }
+    if (data?.question?.length >= 100 && !toast.isActive(toastId3.current)) {
+      toastId3.current = toast("Pertanyaan Melebihi Batas");
+    }
+    if (data?.answer?.length >= 100 && !toast.isActive(toastId4.current)) {
+      toastId4.current = toast("Jawaban Melebihi Batas");
+    }
+  }, [data]);
 
   useEffect(() => {
     const getDeviceType = () => {
@@ -311,6 +333,7 @@ export default function Template() {
               id="sender_name"
               name="sender_name"
               placeholder="Nama mu siapa?"
+              maxLength="50"
             />
 
             <div className={`${styles.showCheck} ${styles.marginBottom}`}>
@@ -329,6 +352,7 @@ export default function Template() {
               id="receive_name"
               name="receive_name"
               placeholder="Penerima suratnya siapa?"
+              maxLength="50"
             />
             <div className={`${styles.showCheck} ${styles.marginBottom}`}>
               <input
@@ -346,6 +370,7 @@ export default function Template() {
             className={`${styles.inputSender} ${styles.marginBottom}`}
             id="question"
             name="question"
+            maxLength="100"
             placeholder="Masukkin pertanyaan untuk dia"
           />
           <div className={styles.label}>Jawaban</div>
@@ -354,6 +379,7 @@ export default function Template() {
             className={`${styles.inputSender} ${styles.marginBottom}`}
             id="answer"
             name="answer"
+            maxLength="100"
             placeholder="Masukkin jawabannya juga ya"
           />
         </div>
@@ -486,12 +512,27 @@ export default function Template() {
 
         <div className={styles.wrapperSee}>
           <button
-            disabled={templateData[idData] !== undefined ? false : true}
+            disabled={
+              templateData[idData] === undefined ||
+              data?.sender_name?.length > 50 ||
+              data?.receive_name?.length > 50 ||
+              data?.question?.length > 100 ||
+              data?.answer?.length > 100
+                ? true
+                : false
+            }
             onClick={handlePreview}
           >
             Lihat Surat
           </button>
         </div>
+      </div>
+      <div>
+        <ToastContainer
+          position="bottom-center"
+          newestOnTop
+          pauseOnFocusLoss={false}
+        />
       </div>
     </DashboardLayout>
   );

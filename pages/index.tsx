@@ -10,6 +10,7 @@ import Lottie from "react-lottie";
 import * as messages from "./../src/components/get_msg.json";
 import * as question from "./../src/components/question.json";
 import "animate.css";
+import Error from "../src/components/common/Error";
 
 export default function Input() {
   const router = useRouter();
@@ -61,7 +62,7 @@ export default function Input() {
         router.push(`?id=${data?.id_message_1 + "-" + data?.id_message_2}`);
       } else {
         setFoundSearch(false);
-        alert("Salah!");
+        alert("ID Kamu Salah! Coba Lagi..");
       }
     }
   }, [foundSearch, found]);
@@ -135,12 +136,22 @@ export default function Input() {
                 {found[0]?.secure_question}
               </div>
               <div className={styles.inputFull}>
-                <input onChange={handleChange} name="answer" id="answer" />
+                <input
+                  onChange={handleChange}
+                  name="answer"
+                  id="answer"
+                  maxLength="100"
+                />
               </div>
             </div>
           </div>
           <div className={styles.wrapBtn}>
-            <button onClick={handleAnswer}>Kirim Jawaban</button>
+            <button
+              disabled={data?.answer?.length > 100 ? true : false}
+              onClick={handleAnswer}
+            >
+              Kirim Jawaban
+            </button>
             <div className={styles.skip} onClick={handleSkip}>
               Belum menerima surat, <b>lewati ini</b>
             </div>
@@ -206,6 +217,9 @@ export default function Input() {
             </div>
           </div>
         </div>
+      )}
+      {data?.answer?.length > 100 && (
+        <Error title="Jawaban Melebihi Batas Karakter" />
       )}
     </DashboardLayout>
   );

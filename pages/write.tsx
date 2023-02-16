@@ -14,6 +14,8 @@ import DashboardLayout from "../src/components/DashboardLayout";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { count } from "console";
+import { ToastContainer, toast, TypeOptions } from "react-toastify";
+import "react-toastify/ReactToastify.min.css";
 import Error from "../src/components/common/Error";
 
 const MainScreen = () => {
@@ -27,6 +29,7 @@ const MainScreen = () => {
   const [reverseShow, setReverseShow]: any = useState(false);
   const [disable, setDisable]: any = useState(false);
   const [animationCopy, setAnimationCopy]: any = useState(false);
+  const [error, setError]: any = useState(false);
   const [animationSound, setAnimationSound]: any = useState(false);
   const [reverse, setReverse]: any = useState();
   const [reverseUpdated, setReverseUpdated]: any = useState();
@@ -44,6 +47,10 @@ const MainScreen = () => {
   useEffect(() => {
     setLanguangeType(convertWordList[indexSelected]?.toLowerCase());
   }, [indexSelected]);
+
+  useEffect(() => {
+    if (countChar?.length >= 255) toast("Karakter melebihi batas!");
+  }, [countChar]);
 
   useEffect(() => {
     if (text) {
@@ -145,87 +152,92 @@ const MainScreen = () => {
   const handleChange = (e) => {
     let tmp = e.target.value;
     setCountChar(tmp);
-    if (reverseShow) {
-      if (languangeType !== "u") {
-        if (tmp !== "") {
-          let tmpReverse = tmp;
-          let resultConvert;
+    if (tmp.length < 255) {
+      if (reverseShow) {
+        if (languangeType !== "u") {
+          if (tmp !== "") {
+            let tmpReverse = tmp;
+            let resultConvert;
 
-          let convertNonVocalAlpha = tmpReverse.split(/[aeiou]/gi);
-          let convertVocalAlpha = tmpReverse.match(/[aeiou]/gi);
+            let convertNonVocalAlpha = tmpReverse.split(/[aeiou]/gi);
+            let convertVocalAlpha = tmpReverse.match(/[aeiou]/gi);
 
-          if (convertVocalAlpha === undefined || convertVocalAlpha === null) {
-            resultConvert += tmpReverse;
-          } else {
-            for (let i = 0; i <= convertNonVocalAlpha.length; i += 2) {
-              for (let j = 0; j <= 0; j++) {
-                resultConvert += convertNonVocalAlpha[i] + convertVocalAlpha[i];
+            if (convertVocalAlpha === undefined || convertVocalAlpha === null) {
+              resultConvert += tmpReverse;
+            } else {
+              for (let i = 0; i <= convertNonVocalAlpha.length; i += 2) {
+                for (let j = 0; j <= 0; j++) {
+                  resultConvert +=
+                    convertNonVocalAlpha[i] + convertVocalAlpha[i];
+                }
               }
+              let final = resultConvert?.split("NaN");
+              let resultFinal = final[0].split("undefined");
+              setReverse(resultFinal[1]);
             }
-            let final = resultConvert?.split("NaN");
-            let resultFinal = final[0].split("undefined");
-            setReverse(resultFinal[1]);
+          } else {
+            setReverse();
           }
         } else {
-          setReverse();
-        }
-      } else {
-        let syllabelWord;
-        let lengthWord;
-        let resultConvertU;
+          let syllabelWord;
+          let lengthWord;
+          let resultConvertU;
 
-        syllabelWord = [];
+          syllabelWord = [];
 
-        lengthWord = tmp.split(" ");
+          lengthWord = tmp.split(" ");
 
-        const syllableRegex =
-          /[^aeiouy]*[aeiouy]+(?:[^aeiouy]*$|[^aeiouy](?=[^aeiouy]))?/gi;
+          const syllableRegex =
+            /[^aeiouy]*[aeiouy]+(?:[^aeiouy]*$|[^aeiouy](?=[^aeiouy]))?/gi;
 
-        function syllabify(words) {
-          return words?.match(syllableRegex);
-        }
+          function syllabify(words) {
+            return words?.match(syllableRegex);
+          }
 
-        for (let i = 0; i <= lengthWord.length; i++) {
-          if (lengthWord) {
-            syllabelWord.push(syllabify(lengthWord[i]));
+          for (let i = 0; i <= lengthWord.length; i++) {
+            if (lengthWord) {
+              syllabelWord.push(syllabify(lengthWord[i]));
+            }
+          }
+
+          for (let i = 0; i <= syllabelWord?.length; i++) {
+            if (syllabelWord[i]?.length) {
+              let remainingTextNya;
+              let positionConvert;
+              let lastWord;
+              let changeWord;
+              let convertWord;
+
+              positionConvert = syllabelWord[i]?.length - 2;
+
+              remainingTextNya = syllabelWord[i].map((item, index) => {
+                return index > 1 && index + 1 !== syllabelWord[i]?.length
+                  ? item
+                  : "";
+              });
+
+              lastWord = syllabelWord[i][1]?.match(/[aeiou]/gi);
+
+              changeWord =
+                syllabelWord[i][syllabelWord[i]?.length - 1]?.match(
+                  /[aeiou]/gi
+                );
+
+              convertWord = syllabelWord[i][1]?.replace(lastWord, changeWord);
+
+              resultConvertU += remainingTextNya.join("") + convertWord + " ";
+
+              setReverse(resultConvertU?.split("undefined"));
+            }
           }
         }
-
-        for (let i = 0; i <= syllabelWord?.length; i++) {
-          if (syllabelWord[i]?.length) {
-            let remainingTextNya;
-            let positionConvert;
-            let lastWord;
-            let changeWord;
-            let convertWord;
-
-            positionConvert = syllabelWord[i]?.length - 2;
-
-            remainingTextNya = syllabelWord[i].map((item, index) => {
-              return index > 1 && index + 1 !== syllabelWord[i]?.length
-                ? item
-                : "";
-            });
-
-            lastWord = syllabelWord[i][1]?.match(/[aeiou]/gi);
-
-            changeWord =
-              syllabelWord[i][syllabelWord[i]?.length - 1]?.match(/[aeiou]/gi);
-
-            convertWord = syllabelWord[i][1]?.replace(lastWord, changeWord);
-
-            resultConvertU += remainingTextNya.join("") + convertWord + " ";
-
-            setReverse(resultConvertU?.split("undefined"));
-          }
-        }
-      }
-    } else {
-      setOriginalText(tmp);
-      if (tmp !== "") {
-        convertWord(tmp, setText, languangeType);
       } else {
-        setText();
+        setOriginalText(tmp);
+        if (tmp !== "") {
+          convertWord(tmp, setText, languangeType);
+        } else {
+          setText();
+        }
       }
     }
   };
@@ -293,7 +305,7 @@ const MainScreen = () => {
         <div className="main-screen__container">
           <div className="main-screen__input">
             <textarea
-              disabled={disable || countChar?.length > 255 ? disable : false}
+              // disabled={countChar?.length > 255 ? true : false}
               type="text"
               id="input"
               placeholder="Tulis surat kamu..."
@@ -301,6 +313,7 @@ const MainScreen = () => {
               onChange={handleChange}
               autoFocus
               rows={3}
+              maxlength="255"
             />
 
             <div className="main-screen__selector">
@@ -393,7 +406,7 @@ const MainScreen = () => {
               <button
                 disabled={
                   (reverse === undefined && text === undefined) ||
-                  countChar?.length > 255
+                  countChar?.length >= 255
                     ? true
                     : false
                 }
@@ -414,9 +427,10 @@ const MainScreen = () => {
               </div>
             </div>
           )}
-          {countChar?.length > 255 && (
+          <ToastContainer position="bottom-center" newestOnTop />
+          {/* {countChar?.length > 255 && (
             <Error title="Karakter melebihi batas!" />
-          )}
+          )} */}
         </div>
       </div>
     </DashboardLayout>
