@@ -25,6 +25,7 @@ export default function Template() {
   const toastId2 = React.useRef(null);
   const toastId3 = React.useRef(null);
   const toastId4 = React.useRef(null);
+  const toastId5 = React.useRef(null);
   const exportRef: any = useRef<HTMLDivElement>();
   const [idData, setIdData]: any = useState();
   const [platform, setPlatform]: any = useState();
@@ -39,6 +40,7 @@ export default function Template() {
   const [link, setLink]: any = useState();
   const [json, setJson]: any = useState();
   const [data, setData]: any = useState();
+  const [isUndefined, setIsUndefined] = useState(false);
   const [showForm, setShowForm]: any = useState(false);
   const [clone, setClone]: any = useState(false);
   const [senderShowForm, setSenderShowForm]: any = useState(false);
@@ -102,18 +104,31 @@ export default function Template() {
   }, []);
 
   useEffect(() => {
-    if (data?.sender_name?.length >= 50 && !toast.isActive(toastId.current)) {
+    if (data?.sender_name?.length > 50 && !toast.isActive(toastId.current)) {
       toastId.current = toast("Nama Pengirim Melebihi Batas");
     }
-    if (data?.receive_name?.length >= 50 && !toast.isActive(toastId2.current)) {
+    if (data?.receive_name?.length > 50 && !toast.isActive(toastId2.current)) {
       toastId2.current = toast("Nama Penerima Melebihi Batas");
     }
-    if (data?.question?.length >= 100 && !toast.isActive(toastId3.current)) {
+    if (data?.question?.length > 100 && !toast.isActive(toastId3.current)) {
       toastId3.current = toast("Pertanyaan Melebihi Batas");
     }
-    if (data?.answer?.length >= 100 && !toast.isActive(toastId4.current)) {
+    if (data?.answer?.length > 100 && !toast.isActive(toastId4.current)) {
       toastId4.current = toast("Jawaban Melebihi Batas");
     }
+    if (isUndefined && !toast.isActive(toastId5.current)) {
+      toastId5.current = toast("Mohon Lengkapi Data!");
+      setIsUndefined(false);
+    }
+  }, [data, isUndefined]);
+
+  useEffect(() => {
+    // console.log(
+    //   data?.sender_name,
+    //   data?.receive_name,
+    //   data?.question,
+    //   data?.answer
+    // );
   }, [data]);
 
   useEffect(() => {
@@ -138,18 +153,39 @@ export default function Template() {
     if (data?.sender === undefined && data?.receiver === undefined) {
       setSaveTemplate(false);
     }
+
+    console.log(data?.sender_name === undefined ||
+      data?.receive_name === undefined ||
+      data?.question === undefined ||
+      data?.answer === undefined)
   }, [data]);
 
   const handleSelected = (e: any, index: any) => {
     e.preventDefault();
-    setIdData(index);
+    if (
+      data?.sender_name === undefined ||
+      data?.receive_name === undefined ||
+      data?.question === undefined ||
+      data?.answer === undefined
+    ) {
+      setIsUndefined(true);
+    } else {
+      setIdData(index);
+    }
   };
 
   const handleChange = (e: any) => {
     e.preventDefault();
-    const newData = { ...data };
-    newData[e.target.id] = e.target.value;
-    setData(newData);
+    // if (
+    //   data?.sender_name?.length <= 50 ||
+    //   data?.receive_name?.length <= 50 ||
+    //   data?.question?.length <= 100 ||
+    //   data?.answer?.length <= 100
+    // ) {
+      const newData = { ...data };
+      newData[e.target.id] = e.target.value;
+      setData(newData);
+    // }
   };
 
   const handleCheckSender = (e: any) => {
@@ -179,12 +215,12 @@ export default function Template() {
         message_id: randomizeNumber,
         original_text: dataCookie?.original,
         randomize_text: randomWord ? randomResult : "",
-        receive_from: showForm ? "********" : data?.receive_name,
-        original_receive_from: data?.receive_name,
-        secure_answer: data?.answer?.toLowerCase(),
-        secure_question: data?.question,
-        send_to: senderShowForm ? "********" : data?.sender_name,
-        original_send_to: data?.sender_name,
+        receive_from: showForm ? "********" : data?.receive_name?.slice(0, 50),
+        original_receive_from: data?.receive_name?.slice(0, 50),
+        secure_answer: data?.answer?.slice(0, 100).toLowerCase(),
+        secure_question: data?.question?.slice(0, 100),
+        send_to: senderShowForm ? "********" : data?.sender_name?.slice(0, 50),
+        original_send_to: data?.sender_name?.slice(0, 50),
         template_id: idData,
       }).then((value: any) => {
         // fetchData(
@@ -277,6 +313,7 @@ export default function Template() {
 
     return array;
   }
+
   useEffect(() => {
     if (randomWord) {
       const newData = randomResult;
@@ -333,7 +370,7 @@ export default function Template() {
               id="sender_name"
               name="sender_name"
               placeholder="Nama mu siapa?"
-              maxLength="50"
+              // maxLength="50"
             />
 
             <div className={`${styles.showCheck} ${styles.marginBottom}`}>
@@ -352,7 +389,7 @@ export default function Template() {
               id="receive_name"
               name="receive_name"
               placeholder="Penerima suratnya siapa?"
-              maxLength="50"
+              // maxLength="50"
             />
             <div className={`${styles.showCheck} ${styles.marginBottom}`}>
               <input
@@ -370,7 +407,7 @@ export default function Template() {
             className={`${styles.inputSender} ${styles.marginBottom}`}
             id="question"
             name="question"
-            maxLength="100"
+            // maxLength="100"
             placeholder="Masukkin pertanyaan untuk dia"
           />
           <div className={styles.label}>Jawaban</div>
@@ -379,7 +416,7 @@ export default function Template() {
             className={`${styles.inputSender} ${styles.marginBottom}`}
             id="answer"
             name="answer"
-            maxLength="100"
+            // maxLength="100"
             placeholder="Masukkin jawabannya juga ya"
           />
         </div>
@@ -436,10 +473,10 @@ export default function Template() {
                       ?.replace(/(\d{3})(\d{3})/, "$1-$2")}
                 </div>
                 <div className={styles.letterText}>
-                  Dari : {senderShowForm ? "******" : data?.sender_name}
+                  Dari : {senderShowForm ? "******" : data?.sender_name?.slice(0, 50)}
                 </div>
                 <div className={styles.letterForText}>
-                  Untuk : {showForm ? "******" : data?.receive_name}
+                  Untuk : {showForm ? "******" : data?.receive_name?.slice(0, 50)}
                 </div>
                 <div className={styles.templateText}>
                   {randomWord ? randomResult.join(" ") : dataCookie.result}

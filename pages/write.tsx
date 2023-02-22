@@ -313,7 +313,7 @@ const MainScreen = () => {
               onChange={handleChange}
               autoFocus
               rows={3}
-              maxlength="255"
+              maxLength="255"
             />
 
             <div className="main-screen__selector">

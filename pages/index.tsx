@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DashboardLayout from "../src/components/DashboardLayout";
 import styles from "./../styles/pages/Input.module.scss";
 import { app, database } from "./../firebase";
@@ -11,9 +11,12 @@ import * as messages from "./../src/components/get_msg.json";
 import * as question from "./../src/components/question.json";
 import "animate.css";
 import Error from "../src/components/common/Error";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/ReactToastify.min.css";
 
 export default function Input() {
   const router = useRouter();
+  const toastId = useRef(null);
   const [data, setData]: any = useState();
   const [messageList, setMessageList]: any = useState();
   const [found, setFound]: any = useState();
@@ -54,6 +57,12 @@ export default function Input() {
       }
     }
   }, [answerQuestion]);
+
+  useEffect(() => {
+    if (data?.answer?.length > 100 && !toast.isActive(toastId.current)) {
+      toastId.current = toast("Jawaban Melebihi Batas");
+    }
+  }, [data]);
 
   useEffect(() => {
     if (foundSearch) {
@@ -140,7 +149,7 @@ export default function Input() {
                   onChange={handleChange}
                   name="answer"
                   id="answer"
-                  maxLength="100"
+                  // maxLength="100"
                 />
               </div>
             </div>
@@ -218,9 +227,11 @@ export default function Input() {
           </div>
         </div>
       )}
-      {data?.answer?.length > 100 && (
-        <Error title="Jawaban Melebihi Batas Karakter" />
-      )}
+      <ToastContainer
+        position="bottom-center"
+        newestOnTop
+        pauseOnFocusLoss={false}
+      />
     </DashboardLayout>
   );
 }
